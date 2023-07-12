@@ -1,3 +1,31 @@
 {
-  "extends": "next/core-web-vitals"
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "@typescript-eslint",
+    "prettier"
+  ],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "rules": {
+    "prettier/prettier": [
+      "error",
+      {
+        "singleQuote": true
+      }
+    ],
+    "semi": "error",
+    "eol-last": "error",
+    "comma-dangle": [
+      "error",
+      "always-multiline"
+    ]
+  },
+  "env": {
+    "browser": true,
+    "node": true
+  }
 }

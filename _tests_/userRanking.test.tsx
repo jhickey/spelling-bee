@@ -1,15 +1,15 @@
-import { render, screen } from "@testing-library/react";
-import "@testing-library/jest-dom"
-import UserRanking from "../components/userRanking";
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import UserRanking from '../src/components/userRanking';
 
-const mockProps = {}
+const mockProps = {};
 
-describe("UserRanking component", () => {
+describe('UserRanking component', () => {
   beforeEach(() => {
-    render(<UserRanking {...mockProps} />)
-  })
-  it("Renders", () => {
-    const userRanking = screen.getByTestId("")
-    expect(userRanking).toBeInTheDocument()
-  })
-})
+    render(<UserRanking {...mockProps} />);
+  });
+  it('Renders', () => {
+    const userRanking = screen.getByTestId('');
+    expect(userRanking).toBeInTheDocument();
+  });
+});

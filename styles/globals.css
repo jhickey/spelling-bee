@@ -2,12 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  -webkit-tap-highlight-color:  rgba(255, 255, 255, 0);
+}
+
 @layer components {
   .game {
     @apply flex flex-col items-center w-screen min-h-screen font-sans pb-2
   }
   .input {
-    @apply font-bold text-2xl text-yellow-500 h-12 flex items-center justify-center 
+    @apply font-bold text-4xl text-yellow-500 h-12 flex items-center justify-center
   }
   .single-btn {
     @apply border m-2 py-3 px-4 rounded-full active:bg-gray-100 disabled:active:bg-white
@@ -197,6 +201,7 @@
   margin-right: -12px;
   margin-left: -5px;
   margin-bottom: -57px;
+
 }
 .hex-top { /* Left side triangle of each gray hex */
   float: left;
@@ -261,6 +266,7 @@
     float: left;
     margin-right: -25px;
     margin-bottom: -58px;
+    transition: all 100ms;
   }
   .hex-top {
     float: left;
@@ -311,3 +317,125 @@
   animation:blink 1s steps(2,start) infinite
 }
 @keyframes blink{from,to{color:transparent}0%{color:rgb(234 179 8)}}
+
+@keyframes shake {
+  20% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  40% {
+    transform: translate3d(2px, 0, 0);
+  }
+  60% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  80% {
+    transform: translate3d(2px, 0, 0);
+  }
+}
+
+
+.push-active {
+  transform: scale3d(0.86, 0.86, 1);
+}
+
+.hive {
+  position: relative;
+  width: 100%;
+  padding-bottom: 103.9230484542%;
+  margin-top: 20px;
+}
+
+.hive-cell {
+  position: absolute;
+  top: 33.3333333333%;
+  left: 30%;
+  width: 40%;
+  height: 33.3333333333%;
+}
+.cell-fill {
+  cursor: pointer;
+  fill: #e6e6e6;
+  transition: all 100ms;
+}
+.cell-letter {
+  font-weight: 700;
+  font-size: 1.875em;
+  text-anchor: middle;
+  text-transform: uppercase;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 200ms;
+}
+
+.hive-cell:first-child .cell-fill {
+  fill: #f7da21;
+}
+
+.hive-cell:first-child .cell-fill.push-active {
+  fill: #f6d609
+}
+
+.hive-cell>.cell-fill.push-active {
+  transform: scale3d(0.86, 0.86, 1);
+  transform-origin: center center
+}
+
+.hive-cell:nth-child(1) {
+  transform: translate(0, 0)
+}
+
+.hive-cell:nth-child(2) {
+  transform: translate(-75%, -50%)
+}
+
+.hive-cell:nth-child(3) {
+  transform: translate(0, -100%)
+}
+
+.hive-cell:nth-child(4) {
+  transform: translate(75%, -50%)
+}
+
+.hive-cell:nth-child(5) {
+  transform: translate(75%, 50%)
+}
+
+.hive-cell:nth-child(6) {
+  transform: translate(0, 100%)
+}
+
+.hive-cell:nth-child(7) {
+  transform: translate(-75%, 50%)
+}
+
+.shuffling {
+  opacity: 0;
+}
+
+.has-error {
+   animation: shake 0.7s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+ }
+
+.input-container {
+  margin: 100px 50px;
+  max-width: 400px;
+}
+
+.found {
+  color: green;
+}
+
+.starting-letters {
+  margin-right: 10px;
+}
+
+table {
+  width: 100%;
+  max-width: 700px;
+  margin: auto;
+}
+
+td {
+  border: 1px solid #00000040 !important;
+  padding: 5px !important;
+}
