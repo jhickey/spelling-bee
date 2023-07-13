@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "npm run build:db && next start",
     "lint": "next lint",
     "test": "jest --watch",
     "build:db": "node scripts/db-setup.js"

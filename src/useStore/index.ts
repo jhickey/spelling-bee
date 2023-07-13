@@ -64,7 +64,7 @@ const useStore = create<GameState>()(
         state.foundWords = wordList;
         state.userPoints = get().getPoints(wordList);
       });
-      fetch('/api/game', {
+      fetch('/api/session', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
