@@ -8,7 +8,8 @@
     "start": "npm run build:db && next start",
     "lint": "next lint",
     "test": "jest --watch",
-    "build:db": "node scripts/db-setup.js"
+    "build:db": "node scripts/db-setup.js",
+    "sync-game": "node scripts/sync-game.js"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.1",
