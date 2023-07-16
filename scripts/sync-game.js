@@ -46,7 +46,7 @@ function dbRun(
                 printDate,
             ]
         );
-        console.log('done');
+        console.log(`pulled game for ${printDate}`);
     } catch (e) {
         console.error(e);
     }
