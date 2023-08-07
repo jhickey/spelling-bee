@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import FullList from '../../src/components/wordList/fullList';
+import FullList from '../../src/components/WordList/FullList';
 
 const mockProps = {
   words: ['bat', 'cat', 'mat'],

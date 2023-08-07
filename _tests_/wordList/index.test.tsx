@@ -1,6 +1,6 @@
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import WordList, { capitalize } from '../../src/components/wordList';
+import WordList, { capitalize } from '../../src/components/WordList';
 
 const mockProps = {
   words: ['Car', 'Bar', 'Mat', 'Door', 'Hat', 'Dog'],

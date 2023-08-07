@@ -1,5 +1,5 @@
 import GameIndex from '../src/components';
-import Loading from '../src/components/loading';
+import Loading from '../src/components/Loading';
 import { dbGetOne, getDatabase } from '../src/utils/database';
 import useStore, { GameState } from '../src/useStore';
 import { useEffect } from 'react';

@@ -1,24 +1,14 @@
-import { AiOutlineClose } from 'react-icons/ai';
-import MenuPage from './menuPage';
 import useStore from '../../useStore';
 import { rankingLevels } from '../../constants';
 import { calculateRankingPoints } from '../../utils/game';
-interface RankingsProps {
-  answers: string[];
-  setShowMenuItem: (arg: null) => void;
-}
 
-export default function Rankings(props: RankingsProps) {
-  const { setShowMenuItem } = props;
+export default function Rankings() {
   const { getPoints } = useStore();
 
   return (
-    <MenuPage>
+    <div>
       <div className="flex flex-row justify-between">
         <h2 className="font-bold text-2xl">Rankings</h2>
-        <button className="menu-icon" onClick={() => setShowMenuItem(null)}>
-          <AiOutlineClose />
-        </button>
       </div>
       <ul className="pl-4 font-semithin">
         {rankingLevels.map((rankingLevel) => (
@@ -31,6 +21,6 @@ export default function Rankings(props: RankingsProps) {
           </li>
         ))}
       </ul>
-    </MenuPage>
+    </div>
   );
 }

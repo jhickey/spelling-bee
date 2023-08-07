@@ -2,12 +2,11 @@ import { BsQuestionCircle } from 'react-icons/bs';
 
 interface HeaderProps {
   date?: string;
-  editor?: string;
   setShowMenu: () => void;
 }
 
 export default function Header(props: HeaderProps) {
-  const { date, editor, setShowMenu } = props;
+  const { date, setShowMenu } = props;
 
   return (
     <div
@@ -19,12 +18,6 @@ export default function Header(props: HeaderProps) {
           <h1 className="font-extrabold text-4xl pr-4">Spelling Bee</h1>
           {date && <h2 className="font-thin">{date}</h2>}
         </div>
-        {editor && (
-          <div>
-            <h2>Original NYT game edited by {editor}</h2>
-            <h2>Replicated by Daniel Molloy</h2>
-          </div>
-        )}
       </div>
       <div className="flex flex-col items-end">
         <button

@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import UserRanking from '../src/components/userRanking';
+import UserRanking from '../src/components/UserRanking';
 
 const mockProps = {};
 

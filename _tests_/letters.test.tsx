@@ -1,6 +1,6 @@
 import { render, screen, act, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import Letters from '../src/components/input/letters';
+import Letters from '../src/components/input/Letters';
 
 const mockProps = {
   setLetter: jest.fn(),

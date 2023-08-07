@@ -1,6 +1,6 @@
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import Input from '../src/components/input/input';
+import Input from '../src/components/input/Input';
 
 const mockProps = {
   userWord: '',

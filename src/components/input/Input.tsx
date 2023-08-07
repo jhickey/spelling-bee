@@ -4,7 +4,6 @@ interface InputProps {
   userWord: string;
   setUserWord: (arg: string) => void;
   backSpace: () => void;
-  revealedAnswers: boolean;
   searchWord: (word: string) => void;
   shuffle: () => void;
   outerLetters: string[];
@@ -17,7 +16,6 @@ export default function Input(props: InputProps) {
     userWord,
     setUserWord,
     backSpace,
-    revealedAnswers,
     searchWord,
     shuffle,
     centerLetter,
@@ -31,7 +29,7 @@ export default function Input(props: InputProps) {
     } else if (e.keyCode > 64 && e.keyCode < 91 && !hasError) {
       setUserWord(userWord.concat(e.key.toUpperCase()));
     } else if (e.keyCode === 13) {
-      !revealedAnswers && searchWord(userWord);
+      searchWord(userWord);
     } else if (e.keyCode === 32) {
       shuffle();
     }
@@ -45,7 +43,7 @@ export default function Input(props: InputProps) {
   }, [logKey]);
 
   return (
-    <div data-testid="input-div" className={hasError && 'has-error'}>
+    <div data-testid="input-div" className={hasError ? 'has-error' : ''}>
       <h2 className="input self-center ">
         {userWord.split('').map((letter, i) => (
           <span

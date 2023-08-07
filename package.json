@@ -12,6 +12,10 @@
     "sync-game": "node scripts/sync-game.js"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.14.1",
+    "@mui/material": "^5.14.2",
     "@reduxjs/toolkit": "^1.8.1",
     "immer": "^10.0.2",
     "micro": "^9.3.4",

@@ -1,21 +1,28 @@
 import { useState } from 'react';
-import Header from './header';
-import WordList from './wordList';
-import UserRanking from './userRanking';
+import Header from './Header';
+import WordList from './WordList';
+import UserRanking from './UserRanking';
 import InputIndex from './input';
-import Menu from './menu/menu';
-import Hints from './menu/hints';
-import Rankings from './menu/rankings';
+import Hints from './modals/Hints';
+import Rankings from './modals/Rankings';
 import Realistic from './realistic';
-import Encouragement from './encouragement';
+import Encouragement from './Encouragement';
 import useStore from '../useStore';
+import Modal from './modals/Modal';
 
 export default function GameIndex() {
-  const data = useStore();
-  const { updateFoundWords, getPoints, foundWords, userPoints } = data;
+  const {
+    updateFoundWords,
+    getPoints,
+    foundWords,
+    displayDate,
+    answers,
+    centerLetter,
+    outerLetters,
+    pangrams,
+  } = useStore();
   const [showMenuItem, setShowMenuItem] = useState<string | null>(null);
   const [inputWord, setInputWord] = useState<string>('');
-  const [revealWords, setRevealWords] = useState<boolean>(false);
   const [message, setMessage] = useState<string | null>(null);
   const [reaction, setReaction] = useState<string | null>(null);
   const [addedPoints, setAddedPoints] = useState<number | null>(null);
@@ -37,7 +44,6 @@ export default function GameIndex() {
     setInputWord(inputWord);
     if (inputWord.length >= 20) {
       displayError('Too long');
-      return;
     }
   };
 
@@ -46,9 +52,9 @@ export default function GameIndex() {
       displayError('Too short');
     } else if (foundWords.includes(word)) {
       displayError('Already found');
-    } else if (data.answers.includes(word.toLowerCase())) {
+    } else if (answers.includes(word.toLowerCase())) {
       updateFoundWords([word, ...foundWords]);
-      if (data.pangrams.includes(word.toLowerCase())) {
+      if (pangrams.includes(word.toLowerCase())) {
         setReaction('Pangram!');
         setTimeout(() => setReaction(null), 750);
       }
@@ -61,46 +67,24 @@ export default function GameIndex() {
   };
   return (
     <div data-testid="game-index" className={'flex flex-col items-center'}>
-      <Header
-        date={data.displayDate}
-        editor={data.editor}
-        setShowMenu={() => setShowMenuItem('hints')}
-      />
-      {showMenuItem === 'navbar' && (
-        <Menu
-          showMenuItem={showMenuItem}
-          setShowMenuItem={(arg) => setShowMenuItem(arg)}
-        />
-      )}
-      {showMenuItem === 'hints' && (
-        <Hints
-          revealAnswers={revealWords}
-          setRevealAnswers={() => setRevealWords(true)}
-          setShowMenuItem={(arg) => setShowMenuItem(arg)}
-          pangrams={data.pangrams}
-          answers={data.answers}
-        />
-      )}
-      {showMenuItem === 'rankings' && (
-        <Rankings
-          setShowMenuItem={(arg) => setShowMenuItem(arg)}
-          answers={data.answers}
-        />
-      )}
+      <Header date={displayDate} setShowMenu={() => setShowMenuItem('hints')} />
+      <Modal
+        open={showMenuItem === 'hints'}
+        onClose={() => setShowMenuItem('')}
+      >
+        <Hints />
+      </Modal>
+      <Modal
+        open={showMenuItem === 'rankings'}
+        onClose={() => setShowMenuItem('')}
+      >
+        <Rankings />
+      </Modal>
       <Realistic reaction={reaction} />
       <div className="flex flex-col md:flex-row-reverse w-full">
         <div className="flex flex-col md:w-1/2 w-full md:px-2 items-center">
-          <UserRanking
-            answers={data.answers}
-            userPoints={userPoints}
-            onClickRankingName={() => setShowMenuItem('rankings')}
-          />
-          <WordList
-            answers={data.answers}
-            pangrams={data.pangrams}
-            revealWords={revealWords}
-            words={foundWords}
-          />
+          <UserRanking onClickRankingName={() => setShowMenuItem('rankings')} />
+          <WordList />
         </div>
         {addedPoints && <Encouragement points={addedPoints} />}
         <InputIndex
@@ -108,10 +92,9 @@ export default function GameIndex() {
           hasError={hasError}
           inputWord={inputWord}
           setInputWord={onInput}
-          centerLetter={data.centerLetter.toUpperCase()}
-          revealedAnswers={revealWords}
+          centerLetter={centerLetter.toUpperCase()}
           enterWord={(word) => word.length > 0 && enterWord(word)}
-          outerLetters={data.outerLetters.map((i) => i.toUpperCase())}
+          outerLetters={outerLetters.map((i) => i.toUpperCase())}
         />
       </div>
     </div>

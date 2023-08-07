@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
-import Buttons from './buttons';
-import Input from './input';
-import Letters from './letters';
+import Buttons from './Buttons';
+import Input from './Input';
+import Letters from './Letters';
 
 interface InputIndexProps {
   centerLetter: string;
-  revealedAnswers: boolean;
   outerLetters: string[];
   enterWord: (word: string) => void;
   inputWord: string;
@@ -17,7 +16,6 @@ interface InputIndexProps {
 export default function InputIndex(props: InputIndexProps) {
   const {
     message,
-    revealedAnswers,
     centerLetter,
     outerLetters,
     enterWord,
@@ -52,7 +50,6 @@ export default function InputIndex(props: InputIndexProps) {
         hasError={hasError}
         outerLetters={outerLetters}
         centerLetter={centerLetter}
-        revealedAnswers={revealedAnswers}
         shuffle={() => shuffle()}
         backSpace={() => backSpace()}
         searchWord={(word) => enterWord(word)}
@@ -67,7 +64,6 @@ export default function InputIndex(props: InputIndexProps) {
         isShuffling={isShuffling}
       />
       <Buttons
-        revealedAnswers={revealedAnswers}
         shuffle={() => shuffle()}
         clearWord={() => backSpace()}
         searchWord={() => enterWord(inputWord)}

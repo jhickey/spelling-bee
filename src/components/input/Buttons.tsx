@@ -4,11 +4,10 @@ interface ButtonsProps {
   searchWord: () => void;
   shuffle: () => void;
   clearWord: () => void;
-  revealedAnswers: boolean;
 }
 
 export default function Buttons(props: ButtonsProps) {
-  const { searchWord, shuffle, clearWord, revealedAnswers } = props;
+  const { searchWord, shuffle, clearWord } = props;
 
   return (
     <div
@@ -31,7 +30,6 @@ export default function Buttons(props: ButtonsProps) {
       <button
         onClick={() => searchWord()}
         className="border m-2 py-3 px-4 rounded-full active:bg-gray-100 disabled:active:bg-white select-none"
-        disabled={revealedAnswers}
       >
         Enter
       </button>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { TableCell } from '@mui/material';
 
 interface HintsTableCellProps {
   sum: number;
@@ -7,9 +8,9 @@ interface HintsTableCellProps {
 
 const HintsTableCell = ({ sum, found }: HintsTableCellProps) => {
   return (
-    <td className={sum === found && 'found'}>
+    <TableCell className={sum === found ? 'found' : undefined}>
       {sum === 0 ? '-' : `${found}/${sum}`}
-    </td>
+    </TableCell>
   );
 };
 

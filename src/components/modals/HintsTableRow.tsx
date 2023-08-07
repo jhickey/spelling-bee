@@ -1,4 +1,5 @@
 import HintsTableCell from './HintsTableCell';
+import { TableCell, TableRow } from '@mui/material';
 
 interface HintsTableRowProps {
   letter: string;
@@ -16,18 +17,18 @@ export default function HintsTableRow({ letter, counts }: HintsTableRowProps) {
   );
 
   return (
-    <tr>
-      <td className={rowSum === rowFound ? 'found' : ''}>
+    <TableRow>
+      <TableCell className={rowSum === rowFound ? 'found' : ''}>
         {letter.toUpperCase()}
-      </td>
+      </TableCell>
       {counts.map((count, index) => {
         if (!count) {
-          return <td></td>;
+          return <TableCell />;
         }
         const [sum, found] = count;
         return <HintsTableCell sum={sum} found={found} key={index} />;
       })}
       <HintsTableCell sum={rowSum} found={rowFound} />
-    </tr>
+    </TableRow>
   );
 }

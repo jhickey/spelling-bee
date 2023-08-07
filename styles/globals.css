@@ -439,3 +439,7 @@ td {
   border: 1px solid #00000040 !important;
   padding: 5px !important;
 }
+
+.MuiAccordionSummary-content {
+  max-width: 95%;
+}

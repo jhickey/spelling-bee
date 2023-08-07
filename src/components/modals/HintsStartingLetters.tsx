@@ -31,12 +31,15 @@ export default function HintsStartingLetters({
     }, {});
   return (
     <div style={{ marginTop: '15px' }}>
-      {Object.values(groupedStartingLetters).map((gsl) => {
+      {Object.values(groupedStartingLetters).map((gsl, i) => {
         return (
-          <div>
-            {gsl.map((g) => {
+          <div key={`gsl_${i}`}>
+            {gsl.map((g, j) => {
               return (
-                <span className={`starting-letters ${g.allFound && 'found'}`}>
+                <span
+                  key={`sl_${j}`}
+                  className={`starting-letters ${g.allFound && 'found'}`}
+                >
                   {g.letters.toUpperCase()}: {g.found}/{g.count}
                 </span>
               );

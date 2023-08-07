@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import Loading from '../src/components/loading';
+import Loading from '../src/components/Loading';
 
 describe('Loading Component', () => {
   beforeEach(() => {

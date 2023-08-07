@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Hexagon from './hexagon';
+import Hexagon from './Hexagon';
 
 interface LettersProps {
   setLetter: (arg: string) => void;

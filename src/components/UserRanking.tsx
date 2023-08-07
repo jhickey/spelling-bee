@@ -2,14 +2,11 @@ import useStore from '../useStore';
 import { rankingLevels } from '../constants';
 
 interface UserRankingProps {
-  answers: string[];
-  userPoints: number;
   onClickRankingName: () => void;
 }
 
-export default function UserRanking(props: UserRankingProps) {
-  const { userPoints, onClickRankingName } = props;
-  const { getRankingLevel } = useStore();
+export default function UserRanking({ onClickRankingName }: UserRankingProps) {
+  const { getRankingLevel, userPoints } = useStore();
   const userRankingLevel = getRankingLevel();
   return (
     <div className="flex flex-row w-full items-center justify-center">
