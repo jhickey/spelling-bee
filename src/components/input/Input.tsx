@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 interface InputProps {
   userWord: string;
@@ -23,24 +23,44 @@ export default function Input(props: InputProps) {
     hasError,
   } = props;
 
-  const logKey = (e): void => {
+  const [modifierDown, setModifierDown] = useState(false);
+
+  const keyDown = (e): void => {
+    const { keyCode, key } = e;
+    if (keyCode === 91) {
+      setModifierDown(true);
+      return;
+    }
+    if (modifierDown) {
+      return;
+    }
     if (e.keyCode === 8) {
       backSpace();
-    } else if (e.keyCode > 64 && e.keyCode < 91) {
-      setUserWord(userWord.concat(e.key.toUpperCase()));
-    } else if (e.keyCode === 13) {
+    } else if (keyCode > 64 && keyCode < 91) {
+      setUserWord(userWord.concat(key.toUpperCase()));
+    } else if (keyCode === 13) {
       searchWord(userWord);
-    } else if (e.keyCode === 32) {
+    } else if (keyCode === 32) {
       shuffle();
     }
   };
 
+  const keyUp = (e) => {
+    const { keyCode } = e;
+
+    if (keyCode === 91) {
+      setModifierDown(false);
+    }
+  };
+
   useEffect(() => {
-    window.addEventListener('keydown', logKey);
+    window.addEventListener('keydown', keyDown);
+    window.addEventListener('keyup', keyUp);
     return () => {
-      window.removeEventListener('keydown', logKey);
+      window.removeEventListener('keydown', keyDown);
+      window.removeEventListener('keyup', keyUp);
     };
-  }, [logKey]);
+  }, [keyDown]);
 
   return (
     <div data-testid="input-div" className={hasError ? 'has-error' : ''}>
