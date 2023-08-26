@@ -38,7 +38,7 @@ export default function HintsStartingLetters({
               return (
                 <span
                   key={`sl_${j}`}
-                  className={`starting-letters ${g.allFound && 'found'}`}
+                  className={`mr-3 ${g.allFound && 'text-green-600'}`}
                 >
                   {g.letters.toUpperCase()}: {g.found}/{g.count}
                 </span>

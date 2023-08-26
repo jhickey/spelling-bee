@@ -8,7 +8,7 @@ interface HintsTableCellProps {
 
 const HintsTableCell = ({ sum, found }: HintsTableCellProps) => {
   return (
-    <TableCell className={sum === found ? 'found' : undefined}>
+    <TableCell className={sum === found ? 'text-green-600' : undefined}>
       {sum === 0 ? '-' : `${found}/${sum}`}
     </TableCell>
   );

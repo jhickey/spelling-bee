@@ -18,7 +18,7 @@ export default function HintsTableRow({ letter, counts }: HintsTableRowProps) {
 
   return (
     <TableRow>
-      <TableCell className={rowSum === rowFound ? 'found' : ''}>
+      <TableCell className={rowSum === rowFound ? 'text-green-600' : ''}>
         {letter.toUpperCase()}
       </TableCell>
       {counts.map((count, index) => {

@@ -11,12 +11,12 @@ export default function Buttons(props: ButtonsProps) {
 
   return (
     <div
-      className="mt-16 flex flex-row items-center justify-center "
+      className="mt-14 flex flex-row items-center justify-center "
       data-testid="buttons-div"
     >
       <button
         onClick={() => clearWord()}
-        className="border m-2 py-3 px-4 rounded-full active:bg-gray-100 disabled:active:bg-white select-none"
+        className="w-28 border m-2 py-3 px-4 rounded-full active:bg-gray-100 disabled:active:bg-white select-none"
       >
         Delete
       </button>
@@ -29,7 +29,7 @@ export default function Buttons(props: ButtonsProps) {
       </button>
       <button
         onClick={() => searchWord()}
-        className="border m-2 py-3 px-4 rounded-full active:bg-gray-100 disabled:active:bg-white select-none"
+        className="w-28 border m-2 py-3 px-4 rounded-full active:bg-gray-100 disabled:active:bg-white select-none"
       >
         Enter
       </button>

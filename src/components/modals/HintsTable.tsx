@@ -21,7 +21,7 @@ export default function HintsTable({ data }: HintsProps) {
         <Table>
           <TableBody>
             <TableRow>
-              <TableCell></TableCell>
+              <TableCell />
               {lengthColumns.map((length) => (
                 <TableCell key={length}>{length}</TableCell>
               ))}
