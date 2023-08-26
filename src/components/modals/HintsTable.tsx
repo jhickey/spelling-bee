@@ -22,8 +22,15 @@ export default function HintsTable({ data }: HintsProps) {
           <TableBody>
             <TableRow>
               <TableCell />
-              {lengthColumns.map((length) => (
-                <TableCell key={length}>{length}</TableCell>
+              {lengthColumns.map((length, index) => (
+                <TableCell
+                  key={length}
+                  className={
+                    sums[index][0] === sums[index][1] ? 'text-green-600' : ''
+                  }
+                >
+                  {length}
+                </TableCell>
               ))}
               <TableCell>Σ</TableCell>
             </TableRow>
