@@ -27,6 +27,7 @@ export default function GameIndex() {
   const [reaction, setReaction] = useState<string | null>(null);
   const [addedPoints, setAddedPoints] = useState<number | null>(null);
   const [hasError, setHasError] = useState(false);
+  const [errorTimeout, setErrorTimeout] = useState<NodeJS.Timeout | null>(null);
 
   const displayMessage = (message: string, timeout = 750) => {
     setMessage(message);
@@ -36,11 +37,22 @@ export default function GameIndex() {
   const displayError = (message: string) => {
     displayMessage(message);
     setHasError(true);
-    setTimeout(() => setInputWord(''), 750);
-    setTimeout(() => setHasError(false), 750);
+    const timeout = setTimeout(() => {
+      setInputWord('');
+      setHasError(false);
+    }, 750);
+    setErrorTimeout(timeout);
   };
 
   const onInput = (inputWord: string) => {
+    if (hasError) {
+      clearTimeout(errorTimeout);
+      setErrorTimeout(null);
+      setMessage(null);
+      setInputWord('');
+      setHasError(false);
+      return;
+    }
     setInputWord(inputWord);
     if (inputWord.length >= 20) {
       displayError('Too long');

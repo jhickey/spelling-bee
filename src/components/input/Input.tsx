@@ -26,7 +26,7 @@ export default function Input(props: InputProps) {
   const logKey = (e): void => {
     if (e.keyCode === 8) {
       backSpace();
-    } else if (e.keyCode > 64 && e.keyCode < 91 && !hasError) {
+    } else if (e.keyCode > 64 && e.keyCode < 91) {
       setUserWord(userWord.concat(e.key.toUpperCase()));
     } else if (e.keyCode === 13) {
       searchWord(userWord);
