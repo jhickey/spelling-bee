@@ -40,7 +40,7 @@ export default function InputIndex(props: InputIndexProps) {
   };
 
   return (
-    <div className="mt-1 mx-5 flex flex-col items-center md:w-1/2">
+    <div className="mt-9 mx-8 flex flex-col items-center md:w-1/2">
       {message && (
         <div className="absolute -mt-10 z-30 bg-black text-white px-3 py-1 rounded font-light text-sm">
           <h3>{message}</h3>
