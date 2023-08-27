@@ -49,7 +49,7 @@ export default function GameIndex() {
       clearTimeout(errorTimeout);
       setErrorTimeout(null);
       setMessage(null);
-      setInputWord('');
+      setInputWord(inputWord.slice(-1));
       setHasError(false);
       return;
     }
