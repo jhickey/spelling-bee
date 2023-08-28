@@ -1,6 +1,6 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import Hexagon from '../src/components/input/Hexagon';
+import Hexagon from '../src/components/Game/Hexagon';
 
 const mockProps = {
   center: false,

@@ -1,6 +1,6 @@
 import { render, screen, act, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import Buttons from '../src/components/input/Buttons';
+import Buttons from '../src/components/Game/Buttons';
 
 describe('Buttons component', () => {
   const mockProps = {

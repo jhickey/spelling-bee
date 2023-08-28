@@ -1,6 +1,6 @@
-import useStore from '../../useStore';
-import { rankingLevels } from '../../constants';
-import { calculateRankingPoints } from '../../utils/game';
+import useStore from '../useStore';
+import { rankingLevels } from '../constants';
+import { calculateRankingPoints } from '../utils/game';
 
 export default function Rankings() {
   const { getPoints } = useStore();

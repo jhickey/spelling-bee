@@ -2,13 +2,13 @@ import { useState } from 'react';
 import Header from './Header';
 import WordList from './WordList';
 import UserRanking from './UserRanking';
-import InputIndex from './input';
-import Hints from './modals/Hints';
-import Rankings from './modals/Rankings';
+import InputIndex from './Game';
+import Hints from './Hints/Hints';
+import Rankings from './Rankings';
 import Realistic from './realistic';
 import Encouragement from './Encouragement';
 import useStore from '../useStore';
-import Modal from './modals/Modal';
+import Modal from './Modal';
 
 export default function GameIndex() {
   const {
