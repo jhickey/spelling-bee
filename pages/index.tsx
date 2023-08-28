@@ -6,12 +6,11 @@ import { useEffect } from 'react';
 import { GameDataRow, GameSessionRow } from '../src/types';
 import { GetServerSideProps } from 'next';
 import { authPage } from '../src/utils/auth';
+import { calculatePoints } from '../src/utils/game';
 
 export default function Home(props: Partial<GameState>) {
   useEffect(() => {
-    const { getPoints } = useStore.getState();
-    const userPoints = getPoints(props.foundWords);
-    useStore.setState({ ...props, userPoints });
+    useStore.setState(props);
   }, [props.id]);
   if (!props) {
     return <Loading />;
@@ -48,6 +47,8 @@ export const getServerSideProps: GetServerSideProps<
   const pangrams = answers.filter((word) =>
     validLetters.every((vl) => word.includes(vl))
   );
+  const foundWords = session ? JSON.parse(session.words) : [];
+  const userPoints = session ? calculatePoints(foundWords, validLetters) : 0;
   const gameData = {
     displayWeekday: data.date,
     displayDate: data.date,
@@ -60,7 +61,8 @@ export const getServerSideProps: GetServerSideProps<
     id: data.id,
     freeExpiration: '',
     editor: '',
-    foundWords: session ? JSON.parse(session.words) : [],
+    foundWords,
+    userPoints,
   };
 
   return {

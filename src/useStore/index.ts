@@ -1,7 +1,11 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 import { RankingLevel } from '../types';
-import { calculatePangram, calculateRankingLevel } from '../utils/game';
+import {
+  calculatePangram,
+  calculatePoints,
+  calculateRankingLevel,
+} from '../utils/game';
 
 interface GameData {
   displayWeekday: string;
@@ -41,16 +45,8 @@ const useStore = create<GameState>()(
     userPoints: 0,
     foundWords: [],
     getPoints: (wordList = get().answers) => {
-      const { isPangram } = get();
-      return wordList.reduce((points, answer) => {
-        points +=
-          answer.length === 4
-            ? 1
-            : isPangram(answer)
-            ? answer.length + 7
-            : answer.length;
-        return points;
-      }, 0);
+      const { validLetters } = get();
+      return calculatePoints(wordList, validLetters);
     },
     isPangram: (word) => {
       const { validLetters } = get();

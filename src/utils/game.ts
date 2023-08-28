@@ -24,3 +24,15 @@ export const calculateRankingLevel = (points: number, totalPoints: number) => {
 export const calculatePangram = (word: string, validLetters: string[]) => {
   return validLetters.every((vl) => word.includes(vl));
 };
+
+export const calculatePoints = (wordList: string[], validLetters: string[]) => {
+  return wordList.reduce((points, answer) => {
+    points +=
+      answer.length === 4
+        ? 1
+        : calculatePangram(answer, validLetters)
+        ? answer.length + 7
+        : answer.length;
+    return points;
+  }, 0);
+};
