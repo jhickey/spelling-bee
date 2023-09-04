@@ -30,7 +30,7 @@ export const calculatePoints = (wordList: string[], validLetters: string[]) => {
     points +=
       answer.length === 4
         ? 1
-        : calculatePangram(answer, validLetters)
+        : calculatePangram(answer.toLowerCase(), validLetters)
         ? answer.length + 7
         : answer.length;
     return points;
