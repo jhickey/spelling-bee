@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import { GameDataRow, GameSessionRow } from '../src/types';
 import { GetServerSideProps } from 'next';
 import { authPage } from '../src/utils/auth';
-import { calculatePoints } from '../src/utils/game';
+import { calculatePoints, getHints } from '../src/utils/game';
 
 export default function Home(props: Partial<GameState>) {
   useEffect(() => {
@@ -63,6 +63,7 @@ export const getServerSideProps: GetServerSideProps<
     editor: '',
     foundWords,
     userPoints,
+    hints: getHints(foundWords, answers),
   };
 
   return {

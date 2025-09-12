@@ -3,6 +3,7 @@ import { NextApiRequest } from 'next';
 export interface RankingLevel {
   name: string;
   multiplier: number;
+  index: number;
 }
 
 export interface GameSessionRow {

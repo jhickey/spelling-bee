@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import Hexagon from './Hexagon';
 
 interface LettersProps {
@@ -17,7 +16,6 @@ export default function Letters(props: LettersProps) {
     letterIndex,
     isShuffling,
   } = props;
-
   return (
     <div data-testid="letters-div" className="hive">
       <Hexagon
@@ -25,42 +23,17 @@ export default function Letters(props: LettersProps) {
         letter={centerLetter}
         setLetter={() => setLetter(centerLetter)}
       />
-      <Hexagon
-        center={false}
-        letter={outerLetters[letterIndex[0]]}
-        setLetter={() => setLetter(outerLetters[letterIndex[0]])}
-        isShuffling={isShuffling}
-      />
-      <Hexagon
-        center={false}
-        letter={outerLetters[letterIndex[1]]}
-        setLetter={() => setLetter(outerLetters[letterIndex[1]])}
-        isShuffling={isShuffling}
-      />
-      <Hexagon
-        center={false}
-        letter={outerLetters[letterIndex[2]]}
-        setLetter={() => setLetter(outerLetters[letterIndex[2]])}
-        isShuffling={isShuffling}
-      />
-      <Hexagon
-        center={false}
-        letter={outerLetters[letterIndex[3]]}
-        setLetter={() => setLetter(outerLetters[letterIndex[3]])}
-        isShuffling={isShuffling}
-      />
-      <Hexagon
-        center={false}
-        letter={outerLetters[letterIndex[4]]}
-        setLetter={() => setLetter(outerLetters[letterIndex[4]])}
-        isShuffling={isShuffling}
-      />
-      <Hexagon
-        center={false}
-        letter={outerLetters[letterIndex[5]]}
-        setLetter={() => setLetter(outerLetters[letterIndex[5]])}
-        isShuffling={isShuffling}
-      />
+      {Array(6)
+        .fill(0)
+        .map((_, i) => (
+          <Hexagon
+            key={outerLetters[letterIndex[i]]}
+            center={false}
+            letter={outerLetters[letterIndex[i]]}
+            setLetter={() => setLetter(outerLetters[letterIndex[i]])}
+            isShuffling={isShuffling}
+          />
+        ))}
     </div>
   );
 }

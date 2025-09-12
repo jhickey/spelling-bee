@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import useStore from '../../useStore';
 
 interface HexagonProps {
   center: boolean;
@@ -11,6 +12,7 @@ export default function Hexagon(props: HexagonProps) {
   const { letter, setLetter, isShuffling } = props;
   const [isDown, setIsDown] = useState(false);
   const [isTouch, setIsTouch] = useState(false);
+  const { hints, showRemainingStarts, showRemainingTotals } = useStore();
   const inputStart = () => {
     setLetter(letter);
     setIsDown(true);
@@ -44,6 +46,26 @@ export default function Hexagon(props: HexagonProps) {
       >
         {letter}
       </text>
+      {showRemainingStarts && hints.remainingStarts[letter] && (
+        <text
+          className={`remaining-start ${isShuffling && 'shuffling'}`}
+          x="35%"
+          y="75%"
+          dy="0.35em"
+        >
+          {hints.remainingStarts[letter]}
+        </text>
+      )}
+      {showRemainingTotals && hints.remainingTotals[letter] && (
+        <text
+          className={`remaining-total ${isShuffling && 'shuffling'}`}
+          x="65%"
+          y="75%"
+          dy="0.35em"
+        >
+          {hints.remainingTotals[letter]}
+        </text>
+      )}
     </svg>
   );
 }

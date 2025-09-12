@@ -367,6 +367,26 @@
   transition: opacity 200ms;
 }
 
+.remaining-start {
+    font-weight: 200;
+    font-size: 0.875em;
+    fill: #da2323;
+    text-anchor: middle;
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity 200ms;
+}
+
+.remaining-total {
+    font-weight: 200;
+    font-size: 0.875em;
+    fill: grey;
+    text-anchor: middle;
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity 200ms;
+}
+
 .hive-cell:first-child .cell-fill {
   fill: #f7da21;
 }
