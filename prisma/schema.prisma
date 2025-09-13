@@ -1,0 +1,46 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Game {
+  id           String    @id @default(cuid())
+  answers      Json
+  centerLetter String    @map("center_letter")
+  letters      Json
+  date         String
+  sessions     Session[]
+
+  @@map("games")
+}
+
+model User {
+  id       String    @id @default(cuid())
+  username String
+  sessions Session[]
+
+  @@map("users")
+}
+
+model Session {
+  id     String @id @default(cuid())
+  userId String @map("user_id")
+  gameId String @map("game_id")
+  words  Json
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  game Game @relation(fields: [gameId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, gameId])
+  @@map("sessions")
+}

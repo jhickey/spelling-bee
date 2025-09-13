@@ -10,15 +10,15 @@ export interface GameSessionRow {
   id: string;
   userId: string;
   gameId: string;
-  words: string;
+  words: string[];
 }
 
 export interface GameDataRow {
-  letters: string;
-  center_letter: string;
+  letters: string[];
+  centerLetter: string;
   date: string;
-  answers: string;
+  answers: string[];
   id: string;
 }
 
-export type NextApiRequestWithUser = NextApiRequest & { userId: number };
+export type NextApiRequestWithUser = NextApiRequest & { userId: string };

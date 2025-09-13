@@ -1,47 +1,96 @@
-import { Database, verbose } from 'sqlite3';
+import { PrismaClient } from '@prisma/client';
+import { LettersSchema, AnswersSchema, WordsSchema } from '../schemas/database';
 
-const sqlite3 = verbose();
+const globalForPrisma = globalThis as unknown as {
+  prisma: PrismaClient | undefined;
+};
 
-export function getDatabase(): Promise<Database> {
-  return new Promise((resolve, reject) => {
-    const db: Database = new sqlite3.Database('./db/sb.db', (err) => {
-      return err ? reject(err) : resolve(db);
-    });
+export const prisma = globalForPrisma.prisma ?? new PrismaClient();
+
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
+
+export async function getLatestGame() {
+  return prisma.game.findFirst({
+    orderBy: { date: 'desc' },
   });
 }
 
-export function dbRun(
-  db: Database,
-  query: string,
-  params: any[] | any = []
-): Promise<number> {
-  return new Promise((resolve, reject) => {
-    db.run(query, params, function (err: Error) {
-      return err ? reject(err) : resolve(this.lastID);
-    });
+export async function createGame(gameData: {
+  answers: unknown;
+  centerLetter: string;
+  letters: unknown;
+  date: string;
+}) {
+  // Validate input data with Zod
+  const validatedAnswers = AnswersSchema.parse(gameData.answers);
+  const validatedLetters = LettersSchema.parse(gameData.letters);
+
+  return prisma.game.create({
+    data: {
+      answers: validatedAnswers,
+      centerLetter: gameData.centerLetter,
+      letters: validatedLetters,
+      date: gameData.date,
+    },
   });
 }
 
-export function dbGetOne<T>(
-  db: Database,
-  query: string,
-  params: any[] | any = []
-): Promise<T> {
-  return new Promise((resolve, reject) => {
-    db.get(query, params, (err, rows: T) => {
-      return err ? reject(err) : resolve(rows);
-    });
+export async function getSession({
+  gameId,
+  userId,
+}: {
+  gameId: string;
+  userId: string;
+}) {
+  return prisma.session.findUnique({
+    where: { userId_gameId: { userId, gameId } },
   });
 }
 
-export function dbGetAll<T>(
-  db: Database,
-  query: string,
-  params: any[] | any = []
-): Promise<T> {
-  return new Promise((resolve, reject) => {
-    db.all(query, params, (err, rows: T) => {
-      return err ? reject(err) : resolve(rows);
+export async function upsertSession({
+  userId,
+  gameId,
+  words,
+}: {
+  userId: string;
+  gameId: string;
+  words: unknown;
+}) {
+  // Validate words array with Zod
+  const validatedWords = WordsSchema.parse(words);
+
+  // Use findFirst to locate existing session, then create or update
+  const existingSession = await prisma.session.findFirst({
+    where: {
+      userId,
+      gameId,
+    },
+  });
+
+  if (existingSession) {
+    return prisma.session.update({
+      where: { id: existingSession.id },
+      data: { words: validatedWords },
     });
+  } else {
+    return prisma.session.create({
+      data: {
+        userId,
+        gameId,
+        words: validatedWords,
+      },
+    });
+  }
+}
+
+export async function findUserByUsername(username: string) {
+  return prisma.user.findFirst({
+    where: { username },
+  });
+}
+
+export async function createUser(username: string) {
+  return prisma.user.create({
+    data: { username },
   });
 }

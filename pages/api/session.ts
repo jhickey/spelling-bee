@@ -1,23 +1,17 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { dbGetOne, dbRun, getDatabase } from '../../src/utils/database';
-import { GameSessionRow } from '../../src/types';
+import { getSession, upsertSession } from '../../src/utils/database';
 import { use } from 'next-api-route-middleware';
 import { authApi } from '../../src/utils/auth';
+import { WordsSchema } from '../../src/schemas/database';
+import { z } from 'zod';
+
 async function getSessionHandler(req: NextApiRequest, res: NextApiResponse) {
-  // const userId: string = res.locals.user;
-  const userId = '1';
-  const { gameId } = req.query;
-  const id = `${gameId}_${userId}`;
+  const userId = 'cmfhi7id00002bnk1b4l0tyig';
+  const { gameId } = z.object({ gameId: z.string() }).parse(req.query);
   try {
-    const db = await getDatabase();
-    const row = await dbGetOne<GameSessionRow>(
-      db,
-      'SELECT * FROM sessions WHERE id = ?',
-      [id]
-    );
+    const row = await getSession({ userId, gameId });
     res.send({
-      id,
-      words: row ? JSON.parse(row.words) : [],
+      words: row ? WordsSchema.parse(row.words) : [],
     });
   } catch (e) {
     console.error(e);
@@ -25,41 +19,20 @@ async function getSessionHandler(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-function getNYTRequest(
-  gameId: string,
-  answers: string[],
-  userId: string,
-  puzzleId: number
-) {
-  const timestamp = Math.round(Date.now() / 1000);
-
-  return {
-    game: 'spelling_bee',
-    game_data: {
-      answers,
-      isRevealed: false,
-    },
-    puzzle_id: puzzleId,
-    schema_version: '0.2.5',
-    timestamp,
-    user_id: userId,
-  };
-}
 async function postSessionHandler(req: NextApiRequest, res: NextApiResponse) {
-  // const userId: string = res.locals.user;
-  const userId = '1';
+  const userId = 'cmfhi7id00002bnk1b4l0tyig';
   const { words, gameId } = req.body;
-  const id = `${gameId}_${userId}`;
   try {
-    const db = await getDatabase();
-    await dbRun(
-      db,
-      'INSERT OR REPLACE INTO sessions (id, userId, gameId, words) VALUES (?, ?, ?, ?)',
-      [id, userId, gameId, JSON.stringify(words)]
-    );
+    // Validate words array using Zod
+    const validatedWords = WordsSchema.parse(words);
+
+    await upsertSession({
+      userId,
+      gameId: gameId as string,
+      words: validatedWords,
+    });
     res.send({
-      id,
-      words,
+      words: validatedWords,
     });
   } catch (e) {
     console.error(e);

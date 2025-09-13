@@ -1,28 +1,19 @@
-import { NextResponse } from 'next/server';
 import logger from './logger';
-import { dbGetOne, dbRun, getDatabase } from './database';
-import { NextApiRequest, NextApiResponse } from 'next';
+import { createUser, findUserByUsername } from './database';
+import { NextApiResponse } from 'next';
 import { NextApiRequestWithUser } from '../types';
 import { IncomingMessage } from 'http';
 
-export const SECURITY_GROUP = 'ermap';
+export const SECURITY_GROUP = 'spelling-bee';
 
 async function getOrCreateUser(userName: string) {
-  const db = await getDatabase();
-  const user = await dbGetOne<{ id: number }>(
-    db,
-    'SELECT id FROM users WHERE username = ?',
-    [userName]
-  );
+  const user = await findUserByUsername(userName);
   if (user) {
     return user.id;
   }
-  const newUserId = await dbRun(db, 'INSERT INTO users (username) VALUES (?)', [
-    userName,
-  ]);
-  logger.info(`created new user`, newUserId);
-  // cache.set(`user_${userName}`, newUserId);
-  return newUserId;
+  const newUser = await createUser(userName);
+  logger.info(`created new user`, newUser.id);
+  return newUser.id;
 }
 export async function authPage(req: IncomingMessage) {
   return await auth(req);

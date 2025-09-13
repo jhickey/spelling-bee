@@ -1,26 +1,11 @@
-const {verbose} = require('sqlite3');
+const { PrismaClient } = require('@prisma/client');
+const { z } = require('zod');
 
-const sqlite3 = verbose();
+const prisma = new PrismaClient();
 
-function getDatabase() {
-    return new Promise((resolve, reject) => {
-        const db = new sqlite3.Database('./db/sb.db', (err) => {
-            return err ? reject(err) : resolve(db);
-        });
-    });
-}
-
-function dbRun(
-    db,
-    query,
-    params
-) {
-    return new Promise((resolve, reject) => {
-        db.run(query, params, function (err) {
-            return err ? reject(err) : resolve(this.lastID);
-        });
-    });
-}
+// Validation schemas
+const LettersSchema = z.array(z.string()).length(7);
+const AnswersSchema = z.array(z.string().min(4));
 
 (async () => {
     try {
@@ -32,22 +17,26 @@ function dbRun(
         const endIndex = text.indexOf('}}', text.indexOf('gameData')) + 2;
         const data = JSON.parse(text.slice(startIndex, endIndex));
         const {
-            today: {id, answers, validLetters, centerLetter, printDate},
+            today: {answers, validLetters, centerLetter, printDate},
         } = data;
-        const db = await getDatabase();
-        await dbRun(
-            db,
-            'INSERT OR REPLACE INTO games (id, answers, letters, center_letter, date) VALUES (?, ?, ?, ?, ?)',
-            [
-                id,
-                JSON.stringify(answers),
-                JSON.stringify(validLetters),
+        
+        // Validate data with Zod
+        const validatedAnswers = AnswersSchema.parse(answers);
+        const validatedLetters = LettersSchema.parse(validLetters);
+        
+        await prisma.game.create({
+            data: {
+                answers: validatedAnswers,
                 centerLetter,
-                printDate,
-            ]
-        );
+                letters: validatedLetters,
+                date: printDate,
+            }
+        });
+        
         console.log(`pulled game for ${printDate}`);
+        await prisma.$disconnect();
     } catch (e) {
         console.error(e);
+        await prisma.$disconnect();
     }
 })();

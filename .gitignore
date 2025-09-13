@@ -35,3 +35,9 @@ yarn-error.log*
 .vercel
 db
 .idea
+
+/src/generated/prisma
+
+.env
+
+tsconfig.tsbuildinfo

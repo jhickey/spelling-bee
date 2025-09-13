@@ -1,12 +1,16 @@
 import GameIndex from '../src/components';
 import Loading from '../src/components/Loading';
-import { dbGetOne, getDatabase } from '../src/utils/database';
+import { getLatestGame, getSession } from '../src/utils/database';
 import useStore, { GameState } from '../src/useStore';
 import { useEffect } from 'react';
-import { GameDataRow, GameSessionRow } from '../src/types';
 import { GetServerSideProps } from 'next';
 import { authPage } from '../src/utils/auth';
 import { calculatePoints, getHints } from '../src/utils/game';
+import {
+  LettersSchema,
+  AnswersSchema,
+  WordsSchema,
+} from '../src/schemas/database';
 
 export default function Home(props: Partial<GameState>) {
   useEffect(() => {
@@ -19,7 +23,7 @@ export default function Home(props: Partial<GameState>) {
 }
 export const getServerSideProps: GetServerSideProps<
   Partial<GameState>
-> = async ({ req, res }) => {
+> = async ({ req }) => {
   const userId = await authPage(req);
   if (!userId) {
     return {
@@ -29,25 +33,25 @@ export const getServerSideProps: GetServerSideProps<
       },
     };
   }
-  const db = await getDatabase();
-  const data = await dbGetOne<GameDataRow>(
-    db,
-    'SELECT * FROM games ORDER BY date DESC LIMIT 1'
-  );
-  const sessionId = `${data.id}_${userId}`;
-  const session = await dbGetOne<GameSessionRow>(
-    db,
-    `SELECT * FROM sessions WHERE id = "${sessionId}" LIMIT 1`
-  );
-  const answers = JSON.parse(data.answers);
-  const validLetters = JSON.parse(data.letters);
+
+  const data = await getLatestGame();
+  if (!data) {
+    return {
+      notFound: true,
+    };
+  }
+
+  const session = await getSession({ gameId: data.id, userId });
+
+  const answers = AnswersSchema.parse(data.answers);
+  const validLetters = LettersSchema.parse(data.letters);
   const outerLetters = validLetters.filter(
-    (letter) => letter !== data.center_letter
+    (letter) => letter !== data.centerLetter
   );
   const pangrams = answers.filter((word) =>
     validLetters.every((vl) => word.includes(vl))
   );
-  const foundWords = session ? JSON.parse(session.words) : [];
+  const foundWords = session ? WordsSchema.parse(session.words) : [];
   const userPoints = session ? calculatePoints(foundWords, validLetters) : 0;
   const gameData = {
     displayWeekday: data.date,
@@ -57,7 +61,7 @@ export const getServerSideProps: GetServerSideProps<
     validLetters,
     outerLetters,
     pangrams,
-    centerLetter: data.center_letter,
+    centerLetter: data.centerLetter,
     id: data.id,
     freeExpiration: '',
     editor: '',
