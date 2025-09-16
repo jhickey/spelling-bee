@@ -1,47 +1,34 @@
-import logger from './logger';
-import { createUser, findUserByUsername } from './database';
-import { NextApiResponse } from 'next';
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from '../../pages/api/auth/[...nextauth]';
+import { GetServerSidePropsContext, NextApiResponse } from 'next';
 import { NextApiRequestWithUser } from '../types';
-import { IncomingMessage } from 'http';
+import { Session } from 'next-auth';
 
-export const SECURITY_GROUP = 'spelling-bee';
-
-async function getOrCreateUser(userName: string) {
-  const user = await findUserByUsername(userName);
-  if (user) {
-    return user.id;
+export async function authPage(context: GetServerSidePropsContext) {
+  const session: Session & { user: { id: string } } = await getServerSession(
+    context.req,
+    context.res,
+    authOptions
+  );
+  if (!session?.user?.id) {
+    return null;
   }
-  const newUser = await createUser(userName);
-  logger.info(`created new user`, newUser.id);
-  return newUser.id;
+  return session.user.id;
 }
-export async function authPage(req: IncomingMessage) {
-  return await auth(req);
-}
+
 export async function authApi(
   req: NextApiRequestWithUser,
   res: NextApiResponse,
   next: () => Promise<void>
 ) {
-  const userId = await auth(req);
-  if (!userId) {
+  const session: Session & { user: { id: string } } = await getServerSession(
+    req,
+    res,
+    authOptions
+  );
+  if (!session?.user?.id) {
     return res.status(401).send({ error: 'unauthorized' });
   }
-  req.userId = userId;
+  req.userId = session.user.id;
   await next();
-}
-
-async function auth(req: NextApiRequestWithUser | IncomingMessage) {
-  const { 'remote-groups': remoteGroups, 'remote-user': remoteUser } =
-    req.headers;
-  if (!remoteUser || !remoteGroups) {
-    logger.warn('missing auth headers');
-    return null;
-  }
-  const groups = (remoteGroups as string).split(',');
-  if (!groups.includes(SECURITY_GROUP)) {
-    logger.warn('user not in security group', remoteUser, remoteGroups);
-    return null;
-  }
-  return await getOrCreateUser(remoteUser as string);
 }

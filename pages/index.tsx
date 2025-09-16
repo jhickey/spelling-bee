@@ -23,12 +23,12 @@ export default function Home(props: Partial<GameState>) {
 }
 export const getServerSideProps: GetServerSideProps<
   Partial<GameState>
-> = async ({ req }) => {
-  const userId = await authPage(req);
+> = async (context) => {
+  const userId = await authPage(context);
   if (!userId) {
     return {
       redirect: {
-        destination: '/unauthorized',
+        destination: '/api/auth/signin',
         permanent: false,
       },
     };

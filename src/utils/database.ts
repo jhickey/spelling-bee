@@ -42,12 +42,12 @@ export async function getSession({
   gameId: string;
   userId: string;
 }) {
-  return prisma.session.findUnique({
+  return prisma.gameSession.findUnique({
     where: { userId_gameId: { userId, gameId } },
   });
 }
 
-export async function upsertSession({
+export async function upsertGameSession({
   userId,
   gameId,
   words,
@@ -60,7 +60,7 @@ export async function upsertSession({
   const validatedWords = WordsSchema.parse(words);
 
   // Use findFirst to locate existing session, then create or update
-  const existingSession = await prisma.session.findFirst({
+  const existingSession = await prisma.gameSession.findFirst({
     where: {
       userId,
       gameId,
@@ -68,12 +68,12 @@ export async function upsertSession({
   });
 
   if (existingSession) {
-    return prisma.session.update({
+    return prisma.gameSession.update({
       where: { id: existingSession.id },
       data: { words: validatedWords },
     });
   } else {
-    return prisma.session.create({
+    return prisma.gameSession.create({
       data: {
         userId,
         gameId,
@@ -81,16 +81,4 @@ export async function upsertSession({
       },
     });
   }
-}
-
-export async function findUserByUsername(username: string) {
-  return prisma.user.findFirst({
-    where: { username },
-  });
-}
-
-export async function createUser(username: string) {
-  return prisma.user.create({
-    data: { username },
-  });
 }

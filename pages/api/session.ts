@@ -1,15 +1,18 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { getSession, upsertSession } from '../../src/utils/database';
+import { NextApiResponse } from 'next';
+import { getSession, upsertGameSession } from '../../src/utils/database';
 import { use } from 'next-api-route-middleware';
 import { authApi } from '../../src/utils/auth';
 import { WordsSchema } from '../../src/schemas/database';
 import { z } from 'zod';
+import { NextApiRequestWithUser } from '../../src/types';
 
-async function getSessionHandler(req: NextApiRequest, res: NextApiResponse) {
-  const userId = 'cmfhi7id00002bnk1b4l0tyig';
+async function getSessionHandler(
+  req: NextApiRequestWithUser,
+  res: NextApiResponse
+) {
   const { gameId } = z.object({ gameId: z.string() }).parse(req.query);
   try {
-    const row = await getSession({ userId, gameId });
+    const row = await getSession({ userId: req.userId, gameId });
     res.send({
       words: row ? WordsSchema.parse(row.words) : [],
     });
@@ -19,15 +22,17 @@ async function getSessionHandler(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-async function postSessionHandler(req: NextApiRequest, res: NextApiResponse) {
-  const userId = 'cmfhi7id00002bnk1b4l0tyig';
+async function postSessionHandler(
+  req: NextApiRequestWithUser,
+  res: NextApiResponse
+) {
   const { words, gameId } = req.body;
   try {
     // Validate words array using Zod
     const validatedWords = WordsSchema.parse(words);
 
-    await upsertSession({
-      userId,
+    await upsertGameSession({
+      userId: req.userId,
       gameId: gameId as string,
       words: validatedWords,
     });
@@ -40,7 +45,7 @@ async function postSessionHandler(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequestWithUser, res: NextApiResponse) {
   switch (req.method) {
     case 'POST':
       await postSessionHandler(req, res);

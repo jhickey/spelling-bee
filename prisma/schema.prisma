@@ -14,33 +14,108 @@ datasource db {
 }
 
 model Game {
-  id           String    @id @default(cuid())
+  id           String        @id @default(cuid())
   answers      Json
-  centerLetter String    @map("center_letter")
+  centerLetter String        @map("center_letter")
   letters      Json
   date         String
-  sessions     Session[]
+  sessions     GameSession[]
 
-  @@map("games")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("game")
 }
 
-model User {
-  id       String    @id @default(cuid())
-  username String
-  sessions Session[]
-
-  @@map("users")
-}
-
-model Session {
+model GameSession {
   id     String @id @default(cuid())
   userId String @map("user_id")
   gameId String @map("game_id")
   words  Json
 
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   game Game @relation(fields: [gameId], references: [id], onDelete: Cascade)
 
   @@unique([userId, gameId])
-  @@map("sessions")
+  @@map("game_session")
 }
+
+model User {
+  id            String          @id @default(cuid())
+  name          String?
+  email         String          @unique
+  emailVerified DateTime? @map("email_verified")
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  Authenticator Authenticator[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  GameSession GameSession[]
+  @@map("user")
+}
+
+model Account {
+  userId            String @map("user_id")
+  type              String
+  provider          String
+  providerAccountId String @map("provider_account_id")
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+  @@map("account")
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       String @map("user_id")
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  @@map("session")
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
+  @@map("verification_token")
+}
+
+model Authenticator {
+  credentialID         String  @unique @map("credential_id")
+  userId               String @map("user_id")
+  providerAccountId    String @map("provider_account_id")
+  credentialPublicKey  String @map("credential_public_key")
+  counter              Int
+  credentialDeviceType String @map("credential_device_type")
+  credentialBackedUp   Boolean @map("credential_backed_up")
+  transports           String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, credentialID])
+  @@map("authenticator")
+}
+
+
