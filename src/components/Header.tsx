@@ -21,10 +21,10 @@ export default function Header(props: HeaderProps) {
           {date && <h2 className="font-thin">{date}</h2>}
         </div>
       </div>
-      <div className="flex flex-row items-center gap-2">
+      <div className="flex flex-row justify-between gap-2 px-4">
         {session?.user && (
           <div className="flex items-center gap-2 mr-2">
-            <span className="text-sm text-gray-600">
+            <span className="text-sm text-red">
               Welcome, {session.user.name}
             </span>
             <button
