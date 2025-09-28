@@ -9,6 +9,12 @@ export const prisma = globalForPrisma.prisma ?? new PrismaClient();
 
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
 
+export async function getGame(gameId: string) {
+  return prisma.game.findUnique({
+    where: { id: gameId },
+  });
+}
+
 export async function getLatestGame() {
   return prisma.game.findFirst({
     orderBy: { date: 'desc' },

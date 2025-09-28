@@ -1,16 +1,16 @@
-import GameIndex from '../src/components';
-import Loading from '../src/components/Loading';
-import { getLatestGame, getSession } from '../src/utils/database';
-import useStore, { GameState } from '../src/useStore';
+import GameIndex from '../../src/components';
+import Loading from '../../src/components/Loading';
+import { getGame, getSession } from '../../src/utils/database';
+import useStore, { GameState } from '../../src/useStore';
 import { useEffect } from 'react';
 import { GetServerSideProps } from 'next';
-import { authPage } from '../src/utils/auth';
-import { calculatePoints, getHints } from '../src/utils/game';
+import { authPage } from '../../src/utils/auth';
+import { calculatePoints, getHints } from '../../src/utils/game';
 import {
   LettersSchema,
   AnswersSchema,
   WordsSchema,
-} from '../src/schemas/database';
+} from '../../src/schemas/database';
 
 export const getServerSideProps: GetServerSideProps<
   Partial<GameState>
@@ -24,20 +24,21 @@ export const getServerSideProps: GetServerSideProps<
       },
     };
   }
+  const { id } = context.params as { id: string };
 
-  const latestGame = await getLatestGame();
-  if (!latestGame) {
+  const currentGame = await getGame(id);
+  if (!currentGame) {
     return {
       notFound: true,
     };
   }
 
-  const session = await getSession({ gameId: latestGame.id, userId });
+  const session = await getSession({ gameId: currentGame.id, userId });
 
-  const answers = AnswersSchema.parse(latestGame.answers);
-  const validLetters = LettersSchema.parse(latestGame.letters);
+  const answers = AnswersSchema.parse(currentGame.answers);
+  const validLetters = LettersSchema.parse(currentGame.letters);
   const outerLetters = validLetters.filter(
-    (letter) => letter !== latestGame.centerLetter
+    (letter) => letter !== currentGame.centerLetter
   );
   const pangrams = answers.filter((word) =>
     validLetters.every((vl) => word.includes(vl))
@@ -45,15 +46,15 @@ export const getServerSideProps: GetServerSideProps<
   const foundWords = session ? WordsSchema.parse(session.words) : [];
   const userPoints = session ? calculatePoints(foundWords, validLetters) : 0;
   const gameData = {
-    displayWeekday: latestGame.date.toISOString(),
-    displayDate: latestGame.date.toISOString(),
-    printDate: latestGame.date.toISOString(),
+    displayWeekday: currentGame.date.toISOString(),
+    displayDate: currentGame.date.toISOString(),
+    printDate: currentGame.date.toISOString(),
     answers,
     validLetters,
     outerLetters,
     pangrams,
-    centerLetter: latestGame.centerLetter,
-    id: latestGame.id,
+    centerLetter: currentGame.centerLetter,
+    id: currentGame.id,
     freeExpiration: '',
     editor: '',
     foundWords,
@@ -66,7 +67,7 @@ export const getServerSideProps: GetServerSideProps<
   };
 };
 
-export default function Home(props: Partial<GameState>) {
+export default function GamePage(props: Partial<GameState>) {
   useEffect(() => {
     useStore.setState(props);
   }, [props.id]);

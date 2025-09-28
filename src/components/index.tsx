@@ -9,6 +9,7 @@ import Realistic from './realistic';
 import Encouragement from './Encouragement';
 import useStore from '../useStore';
 import Modal from './Modal';
+import Calendar from './Calendar';
 
 export default function GameIndex() {
   const {
@@ -79,7 +80,7 @@ export default function GameIndex() {
   };
   return (
     <div data-testid="game-index" className={'flex flex-col items-center'}>
-      <Header date={displayDate} setShowMenu={() => setShowMenuItem('hints')} />
+      <Header date={displayDate} setShowMenu={setShowMenuItem} />
       <Modal
         open={showMenuItem === 'hints'}
         onClose={() => setShowMenuItem('')}
@@ -91,6 +92,12 @@ export default function GameIndex() {
         onClose={() => setShowMenuItem('')}
       >
         <Rankings />
+      </Modal>
+      <Modal
+        open={showMenuItem === 'calendar'}
+        onClose={() => setShowMenuItem('')}
+      >
+        <Calendar />
       </Modal>
       <Realistic reaction={reaction} />
       <div className="flex flex-col md:flex-row-reverse w-full">

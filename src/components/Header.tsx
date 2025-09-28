@@ -1,9 +1,9 @@
-import { BsQuestionCircle } from 'react-icons/bs';
+import { BsLightbulb, BsCalendar3 } from 'react-icons/bs';
 import { signOut, useSession } from 'next-auth/react';
 
 interface HeaderProps {
   date?: string;
-  setShowMenu: () => void;
+  setShowMenu: (val: string) => void;
 }
 
 export default function Header(props: HeaderProps) {
@@ -12,7 +12,7 @@ export default function Header(props: HeaderProps) {
 
   return (
     <div
-      className="md:p-4 flex flex-row md:justify-between w-full md:items-start justify-between"
+      className="flex flex-row justify-between w-full"
       data-testid="header-div"
     >
       <div className="hidden md:flex flex-col">
@@ -38,9 +38,16 @@ export default function Header(props: HeaderProps) {
         <button
           className="hover:bg-gray-100 active:bg-gray-200 text-2xl m-2 w-10 h-10 rounded-full flex items-center justify-center"
           data-testid="menu-icon"
-          onClick={() => setShowMenu()}
+          onClick={() => setShowMenu('calendar')}
         >
-          <BsQuestionCircle />
+          <BsCalendar3 />
+        </button>
+        <button
+          className="hover:bg-gray-100 active:bg-gray-200 text-2xl m-2 w-10 h-10 rounded-full flex items-center justify-center"
+          data-testid="menu-icon"
+          onClick={() => setShowMenu('hints')}
+        >
+          <BsLightbulb />
         </button>
       </div>
     </div>

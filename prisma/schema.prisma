@@ -18,7 +18,7 @@ model Game {
   answers      Json
   centerLetter String        @map("center_letter")
   letters      Json
-  date         String
+  date         DateTime
   sessions     GameSession[]
 
   createdAt DateTime @default(now()) @map("created_at")
