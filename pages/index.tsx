@@ -7,6 +7,7 @@ import { GetServerSideProps } from 'next';
 import { authPage } from '../src/utils/auth';
 import { calculatePoints, getHints, serializeDates } from '../src/utils/game';
 import { LettersSchema } from '../src/schemas/database';
+import Head from 'next/head';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const userId = await authPage(context);
@@ -66,5 +67,12 @@ export default function Home(props: Partial<GameState>) {
   if (!props) {
     return <Loading />;
   }
-  return <GameIndex />;
+  return (
+    <>
+      <Head>
+        <title>Spelling Bee</title>
+      </Head>
+      <GameIndex />
+    </>
+  );
 }
