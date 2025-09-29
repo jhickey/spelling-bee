@@ -1,5 +1,6 @@
 import { BsLightbulb, BsCalendar3 } from 'react-icons/bs';
 import { signOut, useSession } from 'next-auth/react';
+import { format } from 'date-fns';
 
 interface HeaderProps {
   date?: string;
@@ -18,7 +19,9 @@ export default function Header(props: HeaderProps) {
       <div className="hidden md:flex flex-col">
         <div className="flex flex-row items-end">
           <h1 className="font-extrabold text-4xl pr-4">Spelling Bee</h1>
-          {date && <h2 className="font-thin">{date}</h2>}
+          {date && (
+            <h2 className="font-thin">{format(new Date(date), 'M/dd/yyyy')}</h2>
+          )}
         </div>
       </div>
       <div className="flex flex-row justify-between gap-2 px-4">
