@@ -1,4 +1,3 @@
-import { AiOutlineClose } from 'react-icons/ai';
 import HintsGrid from '../../utils/HintsGrid';
 import useStore from '../../useStore';
 import { useEffect, useState } from 'react';
@@ -14,7 +13,7 @@ export default function Hints() {
   useEffect(() => {
     const hintsGrid = new HintsGrid({
       answers,
-      foundWords: foundWords.map((w) => w.toLowerCase()),
+      foundWords,
       validLetters,
     });
     setHints(hintsGrid.getData());

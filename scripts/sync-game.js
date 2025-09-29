@@ -1,6 +1,7 @@
-const { PrismaClient } = require('@prisma/client');
-const { z } = require('zod');
+const {PrismaClient} = require('@prisma/client');
+const {z} = require('zod');
 const fs = require('fs');
+const {getWordsApiClient} = require("../src/clients/WordsApiClient");
 
 const prisma = new PrismaClient();
 
@@ -36,6 +37,25 @@ const AnswersSchema = z.array(z.string().min(4));
                 });
                 console.log(`pulled game for ${printDate}`);
             }
+            const wordsApiClient = getWordsApiClient();
+            const proms = validatedAnswers.map(async answer => {
+                const {frequency} = await wordsApiClient.getFrequency(answer);
+                await prisma.dictionary.upsert({
+                    where: {word: answer},
+                    update: {
+                        frequencyZipf: frequency.zipf || null,
+                        frequencyPerMillion: frequency.perMillion,
+                    },
+                    create: {
+                        word: answer,
+                        isValid: true,
+                        isBonus: false,
+                        frequencyZipf: frequency.zipf || null,
+                        frequencyPerMillion: frequency.perMillion,
+                    }
+                })
+            });
+            await Promise.all(proms);
         });
         await Promise.all(proms);
     } catch (e) {

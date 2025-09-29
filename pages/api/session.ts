@@ -2,7 +2,6 @@ import { NextApiResponse } from 'next';
 import { getSession, upsertGameSession } from '../../src/utils/database';
 import { use } from 'next-api-route-middleware';
 import { authApi } from '../../src/utils/auth';
-import { WordsSchema } from '../../src/schemas/database';
 import { z } from 'zod';
 import { NextApiRequestWithUser } from '../../src/types';
 
@@ -12,9 +11,9 @@ async function getSessionHandler(
 ) {
   const { gameId } = z.object({ gameId: z.string() }).parse(req.query);
   try {
-    const row = await getSession({ userId: req.userId, gameId });
+    const { words } = await getSession({ userId: req.userId, gameId });
     res.send({
-      words: row ? WordsSchema.parse(row.words) : [],
+      words,
     });
   } catch (e) {
     console.error(e);
@@ -29,15 +28,14 @@ async function postSessionHandler(
   const { words, gameId } = req.body;
   try {
     // Validate words array using Zod
-    const validatedWords = WordsSchema.parse(words);
 
     await upsertGameSession({
       userId: req.userId,
       gameId: gameId as string,
-      words: validatedWords,
+      words,
     });
     res.send({
-      words: validatedWords,
+      words,
     });
   } catch (e) {
     console.error(e);

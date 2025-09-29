@@ -7,6 +7,7 @@ import {
   calculateRankingLevel,
   getHints,
 } from '../utils/game';
+import { Word } from '@prisma/client';
 
 interface GameData {
   displayWeekday: string;
@@ -15,22 +16,22 @@ interface GameData {
   centerLetter: string;
   outerLetters: string[];
   validLetters: string[];
-  pangrams: string[];
-  answers: string[];
+  pangrams: Word[];
+  answers: Word[];
   id: string;
   freeExpiration: string;
   editor: string;
-  foundWords: string[];
+  foundWords: Word[];
   userPoints: number;
   hints: Hints;
   showRemainingStarts: boolean;
   showRemainingTotals: boolean;
 }
 export interface GameState extends GameData {
-  isPangram: (answer: string) => boolean;
-  getPoints: (wordList?: string[]) => number;
+  isPangram: (word: string) => boolean;
+  getPoints: (wordList?: Word[]) => number;
   getRankingLevel: () => RankingLevel;
-  updateFoundWords: (wordList: string[]) => void;
+  updateFoundWords: (wordList: Word[]) => void;
 }
 
 export interface Hints {
@@ -56,9 +57,9 @@ const useStore = create<GameState>()(
     showRemainingStarts: true,
     showRemainingTotals: true,
     hints: { remainingStarts: {}, remainingTotals: {} },
-    getPoints: (wordList = get().answers) => {
-      const { validLetters } = get();
-      return calculatePoints(wordList, validLetters);
+    getPoints: (wordList?: Word[]) => {
+      const { validLetters, answers } = get();
+      return calculatePoints(wordList || answers, validLetters);
     },
     isPangram: (word) => {
       const { validLetters } = get();

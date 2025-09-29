@@ -1,5 +1,6 @@
 import { rankingLevels } from '../constants';
 import { Hints } from '../useStore';
+import { Word } from '@prisma/client';
 
 export const getRange = (start: number, end: number): number[] => {
   const arr = [];
@@ -26,24 +27,24 @@ export const calculatePangram = (word: string, validLetters: string[]) => {
   return validLetters.every((vl) => word.includes(vl));
 };
 
-export const calculatePoints = (wordList: string[], validLetters: string[]) => {
+export const calculatePoints = (wordList: Word[], validLetters: string[]) => {
   return wordList.reduce((points, answer) => {
     points +=
-      answer.length === 4
+      answer.value.length === 4
         ? 1
-        : calculatePangram(answer.toLowerCase(), validLetters)
-        ? answer.length + 7
-        : answer.length;
+        : calculatePangram(answer.value.toLowerCase(), validLetters)
+        ? answer.value.length + 7
+        : answer.value.length;
     return points;
   }, 0);
 };
 
-export function getHints(foundWords: string[], answers: string[]): Hints {
+export function getHints(foundWords: Word[], answers: Word[]): Hints {
   const answersLeft = answers.filter(
-    (a) => !foundWords.includes(a.toUpperCase())
+    (a) => !foundWords.map((f) => f.value).includes(a.value.toUpperCase())
   );
   return answersLeft
-    .map((a) => a.toUpperCase())
+    .map((a) => a.value.toUpperCase())
     .reduce<Hints>(
       (acc, answer) => {
         const firstLetter = answer[0];
@@ -63,4 +64,25 @@ export function getHints(foundWords: string[], answers: string[]): Hints {
       },
       { remainingStarts: {}, remainingTotals: {} }
     );
+}
+
+interface ModelWithDates {
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export function serializeDates<T extends ModelWithDates>(obj: T | T[]) {
+  if (Array.isArray(obj)) {
+    return obj.map((item) => ({
+      ...item,
+      createdAt: item.createdAt.toISOString(),
+      updatedAt: item.updatedAt.toISOString(),
+    }));
+  } else {
+    return {
+      ...obj,
+      createdAt: obj.createdAt.toISOString(),
+      updatedAt: obj.updatedAt.toISOString(),
+    };
+  }
 }

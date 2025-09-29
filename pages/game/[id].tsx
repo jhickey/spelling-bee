@@ -5,16 +5,14 @@ import useStore, { GameState } from '../../src/useStore';
 import { useEffect } from 'react';
 import { GetServerSideProps } from 'next';
 import { authPage } from '../../src/utils/auth';
-import { calculatePoints, getHints } from '../../src/utils/game';
 import {
-  LettersSchema,
-  AnswersSchema,
-  WordsSchema,
-} from '../../src/schemas/database';
+  calculatePoints,
+  getHints,
+  serializeDates,
+} from '../../src/utils/game';
+import { LettersSchema } from '../../src/schemas/database';
 
-export const getServerSideProps: GetServerSideProps<
-  Partial<GameState>
-> = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const userId = await authPage(context);
   if (!userId) {
     return {
@@ -35,31 +33,32 @@ export const getServerSideProps: GetServerSideProps<
 
   const session = await getSession({ gameId: currentGame.id, userId });
 
-  const answers = AnswersSchema.parse(currentGame.answers);
+  const sessionWords = session ? session.words : [];
+
   const validLetters = LettersSchema.parse(currentGame.letters);
   const outerLetters = validLetters.filter(
     (letter) => letter !== currentGame.centerLetter
   );
-  const pangrams = answers.filter((word) =>
-    validLetters.every((vl) => word.includes(vl))
+  const pangrams = currentGame.answers.filter((answer) =>
+    validLetters.every((vl) => answer.value.includes(vl))
   );
-  const foundWords = session ? WordsSchema.parse(session.words) : [];
-  const userPoints = session ? calculatePoints(foundWords, validLetters) : 0;
+  const userPoints =
+    session !== null ? calculatePoints(sessionWords, validLetters) : 0;
   const gameData = {
     displayWeekday: currentGame.date.toISOString(),
     displayDate: currentGame.date.toISOString(),
     printDate: currentGame.date.toISOString(),
-    answers,
+    answers: serializeDates(currentGame.answers),
     validLetters,
     outerLetters,
-    pangrams,
+    pangrams: serializeDates(pangrams),
     centerLetter: currentGame.centerLetter,
     id: currentGame.id,
     freeExpiration: '',
     editor: '',
-    foundWords,
+    foundWords: serializeDates(sessionWords),
     userPoints,
-    hints: getHints(foundWords, answers),
+    hints: getHints(sessionWords, currentGame.answers),
   };
 
   return {

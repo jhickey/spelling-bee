@@ -58,9 +58,9 @@ export default function WordList() {
               >
                 {foundWords.map((word) => {
                   return (
-                    <Fade key={word} in timeout={1500}>
+                    <Fade key={word.id} in timeout={1500}>
                       <Box>
-                        <Typography>{capitalize(word)}</Typography>
+                        <Typography>{capitalize(word.value)}</Typography>
                       </Box>
                     </Fade>
                   );

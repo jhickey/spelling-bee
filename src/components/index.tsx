@@ -61,17 +61,18 @@ export default function GameIndex() {
   };
 
   const enterWord = (word: string): void => {
+    const wordObj = answers.find((w) => w.value === word.toLowerCase());
     if (word.length < 4) {
       displayError('Too short');
-    } else if (foundWords.includes(word)) {
+    } else if (foundWords.find((w) => w.value === word.toLowerCase())) {
       displayError('Already found');
-    } else if (answers.includes(word.toLowerCase())) {
-      updateFoundWords([word, ...foundWords]);
-      if (pangrams.includes(word.toLowerCase())) {
+    } else if (wordObj) {
+      updateFoundWords([wordObj, ...foundWords]);
+      if (pangrams.map((w) => w.value).includes(word.toLowerCase())) {
         setReaction('Pangram!');
         setTimeout(() => setReaction(null), 750);
       }
-      setAddedPoints(getPoints([word]));
+      setAddedPoints(getPoints([wordObj]));
       setTimeout(() => setAddedPoints(null), 750);
       setInputWord('');
     } else {

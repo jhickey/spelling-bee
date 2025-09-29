@@ -9,14 +9,14 @@ export default function FullList() {
         {foundWords &&
           [...foundWords].sort().map((i) => (
             <p
-              key={i}
+              key={i.id}
               className={
-                pangrams.includes(i.toLowerCase())
+                pangrams.find((w) => w.value === i.value.toLowerCase())
                   ? 'px-1 border-b border-b-gray-300 py-2 font-semibold'
                   : 'px-1 border-b border-b-gray-300 py-2'
               }
             >
-              {capitalize(i)}
+              {capitalize(i.value)}
             </p>
           ))}
       </div>

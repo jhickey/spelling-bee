@@ -5,16 +5,10 @@ import useStore, { GameState } from '../src/useStore';
 import { useEffect } from 'react';
 import { GetServerSideProps } from 'next';
 import { authPage } from '../src/utils/auth';
-import { calculatePoints, getHints } from '../src/utils/game';
-import {
-  LettersSchema,
-  AnswersSchema,
-  WordsSchema,
-} from '../src/schemas/database';
+import { calculatePoints, getHints, serializeDates } from '../src/utils/game';
+import { LettersSchema } from '../src/schemas/database';
 
-export const getServerSideProps: GetServerSideProps<
-  Partial<GameState>
-> = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const userId = await authPage(context);
   if (!userId) {
     return {
@@ -33,32 +27,31 @@ export const getServerSideProps: GetServerSideProps<
   }
 
   const session = await getSession({ gameId: latestGame.id, userId });
+  const sessionWords = session ? session.words : [];
 
-  const answers = AnswersSchema.parse(latestGame.answers);
   const validLetters = LettersSchema.parse(latestGame.letters);
   const outerLetters = validLetters.filter(
     (letter) => letter !== latestGame.centerLetter
   );
-  const pangrams = answers.filter((word) =>
-    validLetters.every((vl) => word.includes(vl))
+  const pangrams = latestGame.answers.filter((word) =>
+    validLetters.every((vl) => word.value.includes(vl))
   );
-  const foundWords = session ? WordsSchema.parse(session.words) : [];
-  const userPoints = session ? calculatePoints(foundWords, validLetters) : 0;
+  const userPoints = session ? calculatePoints(sessionWords, validLetters) : 0;
   const gameData = {
     displayWeekday: latestGame.date.toISOString(),
     displayDate: latestGame.date.toISOString(),
     printDate: latestGame.date.toISOString(),
-    answers,
+    answers: serializeDates(latestGame.answers),
     validLetters,
     outerLetters,
-    pangrams,
+    pangrams: serializeDates(pangrams),
     centerLetter: latestGame.centerLetter,
     id: latestGame.id,
     freeExpiration: '',
     editor: '',
-    foundWords,
+    foundWords: serializeDates(sessionWords),
     userPoints,
-    hints: getHints(foundWords, answers),
+    hints: getHints(sessionWords, latestGame.answers),
   };
 
   return {

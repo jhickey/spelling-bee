@@ -15,7 +15,8 @@ datasource db {
 
 model Game {
   id           String        @id @default(cuid())
-  answers      Json
+  nytId        Int?          @unique @map("nyt_id")
+  answers      Word[]
   centerLetter String        @map("center_letter")
   letters      Json
   date         DateTime
@@ -31,7 +32,7 @@ model GameSession {
   id     String @id @default(cuid())
   userId String @map("user_id")
   gameId String @map("game_id")
-  words  Json
+  words  Word[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -47,7 +48,7 @@ model User {
   id            String          @id @default(cuid())
   name          String?
   email         String          @unique
-  emailVerified DateTime? @map("email_verified")
+  emailVerified DateTime?       @map("email_verified")
   image         String?
   accounts      Account[]
   sessions      Session[]
@@ -57,14 +58,15 @@ model User {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   GameSession GameSession[]
+
   @@map("user")
 }
 
 model Account {
-  userId            String @map("user_id")
+  userId            String  @map("user_id")
   type              String
   provider          String
-  providerAccountId String @map("provider_account_id")
+  providerAccountId String  @map("provider_account_id")
   refresh_token     String?
   access_token      String?
   expires_at        Int?
@@ -84,12 +86,13 @@ model Account {
 
 model Session {
   sessionToken String   @unique
-  userId       String @map("user_id")
+  userId       String   @map("user_id")
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
+
   @@map("session")
 }
 
@@ -104,11 +107,11 @@ model VerificationToken {
 
 model Authenticator {
   credentialID         String  @unique @map("credential_id")
-  userId               String @map("user_id")
-  providerAccountId    String @map("provider_account_id")
-  credentialPublicKey  String @map("credential_public_key")
+  userId               String  @map("user_id")
+  providerAccountId    String  @map("provider_account_id")
+  credentialPublicKey  String  @map("credential_public_key")
   counter              Int
-  credentialDeviceType String @map("credential_device_type")
+  credentialDeviceType String  @map("credential_device_type")
   credentialBackedUp   Boolean @map("credential_backed_up")
   transports           String?
 
@@ -118,4 +121,17 @@ model Authenticator {
   @@map("authenticator")
 }
 
+model Word {
+  id                  Int           @id @default(autoincrement())
+  value               String        @unique
+  games               Game[]
+  gameSessions        GameSession[]
+  isValid             Boolean       @default(true)
+  isBonus             Boolean       @default(false)
+  frequencyZipf       Float?        @map("frequency_zipf")
+  frequencyPerMillion Float?        @map("frequency_per_million")
+  createdAt           DateTime      @default(now()) @map("created_at")
+  updatedAt           DateTime      @updatedAt @map("updated_at")
 
+  @@map("word")
+}
