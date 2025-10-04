@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 interface InputProps {
   userWord: string;
@@ -25,55 +25,56 @@ export default function Input(props: InputProps) {
 
   const [modifierDown, setModifierDown] = useState(false);
 
-  const keyDown = (e): void => {
-    const { keyCode, key } = e;
-    if (keyCode === 91) {
+  const keyDown = (e: KeyboardEvent): void => {
+    const { code, key } = e;
+    if (key === "Meta") {
       setModifierDown(true);
       return;
     }
     if (modifierDown) {
       return;
     }
-    if (e.keyCode === 8) {
+    if (key === "Backspace" || key === "Delete") {
       backSpace();
-    } else if (keyCode > 64 && keyCode < 91) {
+    } else if (code === `Key${key.toUpperCase()}`) {
       setUserWord(userWord.concat(key.toUpperCase()));
-    } else if (keyCode === 13) {
+    } else if (code === "Enter") {
       searchWord(userWord);
-    } else if (keyCode === 32) {
+    } else if (code === "Space") {
+      e.preventDefault();
       shuffle();
     }
   };
 
-  const keyUp = (e) => {
-    const { keyCode } = e;
+  const keyUp = (e: KeyboardEvent) => {
+    const { key } = e;
 
-    if (keyCode === 91) {
+    if (key === "Meta") {
       setModifierDown(false);
     }
   };
 
   useEffect(() => {
-    window.addEventListener('keydown', keyDown);
-    window.addEventListener('keyup', keyUp);
+    window.addEventListener("keydown", keyDown);
+    window.addEventListener("keyup", keyUp);
     return () => {
-      window.removeEventListener('keydown', keyDown);
-      window.removeEventListener('keyup', keyUp);
+      window.removeEventListener("keydown", keyDown);
+      window.removeEventListener("keyup", keyUp);
     };
   }, [keyDown]);
 
   return (
-    <div data-testid="input-div" className={hasError ? 'has-error' : ''}>
+    <div data-testid="input-div" className={hasError ? "has-error" : ""}>
       <h2 className="input self-center ">
-        {userWord.split('').map((letter, i) => (
+        {userWord.split("").map((letter, i) => (
           <span
             key={i}
             className={
               letter === centerLetter.toUpperCase()
-                ? 'text-yellow-500'
+                ? "text-yellow-500"
                 : outerLetters.includes(letter.toUpperCase())
-                ? 'text-black'
-                : 'text-gray-300'
+                  ? "text-black"
+                  : "text-gray-300"
             }
           >
             {letter}

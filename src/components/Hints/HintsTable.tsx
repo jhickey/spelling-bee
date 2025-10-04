@@ -1,12 +1,12 @@
-import { HintsData } from '../../utils/HintsGrid';
-import HintsTableRow from './HintsTableRow';
+import { HintsData } from "../../utils/HintsGrid";
+import HintsTableRow from "./HintsTableRow";
 import {
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableRow,
-} from '@mui/material';
+} from "@mui/material";
 
 interface HintsProps {
   data: HintsData;
@@ -26,7 +26,7 @@ export default function HintsTable({ data }: HintsProps) {
                 <TableCell
                   key={length}
                   className={
-                    sums[index][0] === sums[index][1] ? 'text-green-600' : ''
+                    sums[index][0] === sums[index][1] ? "text-green-600" : ""
                   }
                 >
                   {length}

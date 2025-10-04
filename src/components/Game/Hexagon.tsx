@@ -1,10 +1,10 @@
-import { useState } from 'react';
-import useStore from '../../useStore';
+import { useState } from "react";
+import useGame from "@/hooks/useGame.ts";
 
 interface HexagonProps {
   center: boolean;
   isShuffling?: boolean;
-  letter?: string;
+  letter: string;
   setLetter: (letter: string) => void;
 }
 
@@ -12,7 +12,9 @@ export default function Hexagon(props: HexagonProps) {
   const { letter, setLetter, isShuffling } = props;
   const [isDown, setIsDown] = useState(false);
   const [isTouch, setIsTouch] = useState(false);
-  const { hints, showRemainingStarts, showRemainingTotals } = useStore();
+  const {
+    gameState: { hints, showRemainingStarts, showRemainingTotals },
+  } = useGame();
   const inputStart = () => {
     setLetter(letter);
     setIsDown(true);
@@ -33,13 +35,13 @@ export default function Hexagon(props: HexagonProps) {
       onTouchEnd={() => setIsDown(false)}
     >
       <polygon
-        className={`cell-fill  ${isDown && 'push-active'}`}
+        className={`cell-fill  ${isDown && "push-active"}`}
         points="0,51.96152422706631 30,0 90,0 120,51.96152422706631 90,103.92304845413263 30,103.92304845413263"
         stroke="white"
         strokeWidth="7.5"
       ></polygon>
       <text
-        className={`cell-letter ${isShuffling && 'shuffling'}`}
+        className={`cell-letter ${isShuffling && "shuffling"}`}
         x="50%"
         y="50%"
         dy="0.35em"
@@ -48,7 +50,7 @@ export default function Hexagon(props: HexagonProps) {
       </text>
       {showRemainingStarts && hints.remainingStarts[letter] && (
         <text
-          className={`remaining-start ${isShuffling && 'shuffling'}`}
+          className={`remaining-start ${isShuffling && "shuffling"}`}
           x="35%"
           y="75%"
           dy="0.35em"
@@ -58,7 +60,7 @@ export default function Hexagon(props: HexagonProps) {
       )}
       {showRemainingTotals && hints.remainingTotals[letter] && (
         <text
-          className={`remaining-total ${isShuffling && 'shuffling'}`}
+          className={`remaining-total ${isShuffling && "shuffling"}`}
           x="65%"
           y="75%"
           dy="0.35em"

@@ -1,17 +1,18 @@
-const plugin = require('tailwindcss/plugin');
-const defaultTheme = require('tailwindcss/defaultTheme');
+import plugin from "tailwindcss/plugin";
+
+const defaultTheme = require("tailwindcss/defaultTheme");
 module.exports = {
   content: [
-    './pages/**/*.{js,ts,jsx,tsx}',
-    './src/components/**/*.{js,ts,jsx,tsx}',
+    "./src/routes/**/*.{js,ts,jsx,tsx}",
+    "./src/components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
       fontFamily: {
         custom: [
-          /* '"Press Start 2P"', */ 'Rubik',
-          'Poppins',
-          'Nunito',
+          /* '"Press Start 2P"', */ "Rubik",
+          "Poppins",
+          "Nunito",
           ...defaultTheme.fontFamily.serif,
         ],
       },

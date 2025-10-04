@@ -1,15 +1,21 @@
-import { useRouter } from 'next/router';
-import Link from 'next/link';
+import { createFileRoute, Link } from "@tanstack/react-router";
+import z from "zod";
 
-export default function AuthError() {
-  const router = useRouter();
-  const { error } = router.query;
+export const Route = createFileRoute("/auth/error")({
+  validateSearch: z.object({
+    error: z.string().optional(),
+  }),
+  component: AuthError,
+});
+
+function AuthError() {
+  const { error } = Route.useSearch();
 
   const errorMessages: Record<string, string> = {
-    Configuration: 'There is a problem with the server configuration.',
-    AccessDenied: 'You do not have permission to sign in.',
-    Verification: 'The sign in link is no longer valid.',
-    Default: 'Unable to sign in.',
+    Configuration: "There is a problem with the server configuration.",
+    AccessDenied: "You do not have permission to sign in.",
+    Verification: "The sign in link is no longer valid.",
+    Default: "Unable to sign in.",
   };
 
   const errorMessage = errorMessages[error as string] || errorMessages.Default;
@@ -27,7 +33,7 @@ export default function AuthError() {
         </div>
         <div className="text-center">
           <Link
-            href="/api/auth/signin"
+            to="/auth/signin"
             className="font-medium text-indigo-600 hover:text-indigo-500"
           >
             Try signing in again

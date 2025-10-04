@@ -1,5 +1,3 @@
-import { NextApiRequest } from 'next';
-
 export interface RankingLevel {
   name: string;
   multiplier: number;
@@ -20,5 +18,3 @@ export interface GameDataRow {
   answers: string[];
   id: string;
 }
-
-export type NextApiRequestWithUser = NextApiRequest & { userId: string };

@@ -1,6 +1,6 @@
-import { rankingLevels } from '../constants';
-import { Hints } from '../useStore';
-import { Word } from '@prisma/client';
+import { rankingLevels } from "../constants";
+import { Hints } from "../hooks/useGame";
+import { ZWord } from "../schemas/database";
 
 export const getRange = (start: number, end: number): number[] => {
   const arr = [];
@@ -27,21 +27,21 @@ export const calculatePangram = (word: string, validLetters: string[]) => {
   return validLetters.every((vl) => word.includes(vl));
 };
 
-export const calculatePoints = (wordList: Word[], validLetters: string[]) => {
+export const calculatePoints = (wordList: ZWord[], validLetters: string[]) => {
   return wordList.reduce((points, answer) => {
     points +=
       answer.value.length === 4
         ? 1
         : calculatePangram(answer.value.toLowerCase(), validLetters)
-        ? answer.value.length + 7
-        : answer.value.length;
+          ? answer.value.length + 7
+          : answer.value.length;
     return points;
   }, 0);
 };
 
-export function getHints(foundWords: Word[], answers: Word[]): Hints {
+export function getHints(foundWords: ZWord[], answers: ZWord[]): Hints {
   const answersLeft = answers.filter(
-    (a) => !foundWords.map((f) => f.value).includes(a.value.toUpperCase())
+    (a) => !foundWords.map((f) => f.value).includes(a.value.toUpperCase()),
   );
   return answersLeft
     .map((a) => a.value.toUpperCase())
@@ -53,7 +53,7 @@ export function getHints(foundWords: Word[], answers: Word[]): Hints {
         } else {
           acc.remainingStarts[firstLetter] = 1;
         }
-        answer.split('').forEach((letter) => {
+        answer.split("").forEach((letter) => {
           if (letter in acc.remainingTotals) {
             acc.remainingTotals[letter] += 1;
           } else {
@@ -62,7 +62,7 @@ export function getHints(foundWords: Word[], answers: Word[]): Hints {
         });
         return acc;
       },
-      { remainingStarts: {}, remainingTotals: {} }
+      { remainingStarts: {}, remainingTotals: {} },
     );
 }
 

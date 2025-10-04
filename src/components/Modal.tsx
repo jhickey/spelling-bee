@@ -1,23 +1,23 @@
-import * as React from 'react';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
+import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
 
-import Slide from '@mui/material/Slide';
-import { TransitionProps } from '@mui/material/transitions';
+import Slide from "@mui/material/Slide";
+import { TransitionProps } from "@mui/material/transitions";
+import { forwardRef, ReactElement, Ref } from "react";
 
-const Transition = React.forwardRef(
+const Transition = forwardRef(
   (
     props: TransitionProps & {
-      children: React.ReactElement<any, any>;
+      children: ReactElement<any, any>;
     },
-    ref: React.Ref<unknown>
-  ) => <Slide direction="up" ref={ref} {...props} />
+    ref: Ref<unknown>,
+  ) => <Slide direction="up" ref={ref} {...props} />,
 );
 
 interface ModalProps {
   open: boolean;
   onClose: () => void;
-  children: React.ReactElement<any, any>;
+  children: ReactElement<any, any>;
 }
 
 export default function Modal({ open, onClose, children }: ModalProps) {

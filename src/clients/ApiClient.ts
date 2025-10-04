@@ -1,13 +1,13 @@
-import * as path from 'path';
-import { setTimeout } from 'timers/promises';
-import { ZodTypeAny } from 'zod';
+import path from "path";
+import { setTimeout } from "timers/promises";
+import { ZodTypeAny } from "zod";
 
 export enum HTTPMethod {
-  GET = 'GET',
-  POST = 'POST',
-  PUT = 'PUT',
-  DELETE = 'DELETE',
-  PATCH = 'PATCH',
+  GET = "GET",
+  POST = "POST",
+  PUT = "PUT",
+  DELETE = "DELETE",
+  PATCH = "PATCH",
 }
 
 export interface TransportOptions extends RequestInit {
@@ -30,17 +30,17 @@ export class TransportError<T> extends Error {
   constructor(
     message: string,
     responseStatus: number,
-    responseBody: T = {} as T
+    responseBody: T = {} as T,
   ) {
     super(message);
-    this.name = 'TransportError';
+    this.name = "TransportError";
     this.statusCode = responseStatus;
     this.responseBody = responseBody;
   }
 }
 
 export default abstract class ApiClient<
-  Schemas extends Record<string, ZodTypeAny> = Record<string, never>
+  Schemas extends Record<string, ZodTypeAny> = Record<string, never>,
 > {
   private readonly apiHost: string;
   private readonly apiPath: string;
@@ -54,9 +54,9 @@ export default abstract class ApiClient<
 
   protected constructor({
     apiHost,
-    apiPath = '',
+    apiPath = "",
     headers = {},
-    contentType = 'application/json',
+    contentType = "application/json",
     defaultTimeoutSeconds,
     defaultNumRetries,
     secondsBetweenRetries = 1, // default to 1 second between retries
@@ -75,7 +75,7 @@ export default abstract class ApiClient<
     body?: T,
     options: TransportOptions = {},
     timeoutSeconds: number = this.defaultTimeoutSeconds || 0,
-    numRetries: number = this.defaultNumRetries || 0
+    numRetries: number = this.defaultNumRetries || 0,
   ) {
     const apiUrl = new URL(path.join(this.apiPath, url), this.apiHost);
     if (options.query) {
@@ -93,7 +93,7 @@ export default abstract class ApiClient<
           headers: {
             ...this.headers,
             ...options.headers,
-            'Content-Type': this.contentType,
+            "Content-Type": this.contentType,
           },
           body: body ? JSON.stringify(body) : undefined,
           signal:
@@ -112,7 +112,7 @@ export default abstract class ApiClient<
       if (!response) {
         if (numRetriesRemaining === 0) {
           throw new Error(
-            `Error: No response from ${apiUrl} after ${numRetries} retries`
+            `Error: No response from ${apiUrl} after ${numRetries} retries`,
           );
         }
         await setTimeout(this.secondsBetweenRetries * 1000);
@@ -127,17 +127,17 @@ export default abstract class ApiClient<
       }
       if (numRetriesRemaining === 0) {
         throw new Error(
-          `Error ${response.status} from ${apiUrl}: ${await response.text()}`
+          `Error ${response.status} from ${apiUrl}: ${await response.text()}`,
         );
       }
       if (response.status === 429) {
-        console.log(response.headers.get('Retry-After'));
+        console.log(response.headers.get("Retry-After"));
         await setTimeout(
           1000 *
             parseInt(
-              response.headers.get('Retry-After') ||
-                this.secondsBetweenRetries.toString()
-            )
+              response.headers.get("Retry-After") ||
+                this.secondsBetweenRetries.toString(),
+            ),
         );
         numRetriesRemaining--;
         continue;
@@ -155,27 +155,27 @@ export default abstract class ApiClient<
       if (errorResponse) {
         throw new TransportError<E>(
           `Error ${response.status} from ${apiUrl}: ${JSON.stringify(
-            errorResponse
+            errorResponse,
           )}`,
           response.status,
-          errorResponse
+          errorResponse,
         );
       }
       throw new TransportError(
         `Error ${response.status} from ${apiUrl}: ${await response.text()}`,
-        response.status
+        response.status,
       );
     }
   }
 
   protected getBasicAuthHeader(username: string, password: string) {
-    return Buffer.from(username + ':' + password).toString('base64');
+    return Buffer.from(username + ":" + password).toString("base64");
   }
   protected get<T, E = unknown>(
     url: string,
     options: TransportOptions = {},
     timeoutSeconds?: number,
-    numRetries?: number
+    numRetries?: number,
   ) {
     return this.transport<T, E>(
       url,
@@ -185,7 +185,7 @@ export default abstract class ApiClient<
         ...options,
       },
       timeoutSeconds,
-      numRetries
+      numRetries,
     ) as Promise<T>;
   }
 
@@ -194,7 +194,7 @@ export default abstract class ApiClient<
     body: T,
     options: TransportOptions = {},
     timeoutSeconds?: number,
-    numRetries?: number
+    numRetries?: number,
   ) {
     return this.transport<T, E>(
       url,
@@ -204,7 +204,7 @@ export default abstract class ApiClient<
         ...options,
       },
       timeoutSeconds,
-      numRetries
+      numRetries,
     );
   }
 
@@ -213,7 +213,7 @@ export default abstract class ApiClient<
     body: T,
     options: TransportOptions = {},
     timeoutSeconds?: number,
-    numRetries?: number
+    numRetries?: number,
   ) {
     return this.transport<T, E>(
       url,
@@ -223,7 +223,7 @@ export default abstract class ApiClient<
         ...options,
       },
       timeoutSeconds,
-      numRetries
+      numRetries,
     );
   }
 
@@ -231,7 +231,7 @@ export default abstract class ApiClient<
     url: string,
     options: TransportOptions = {},
     timeoutSeconds?: number,
-    numRetries?: number
+    numRetries?: number,
   ) {
     return this.transport<T, E>(
       url,
@@ -241,7 +241,7 @@ export default abstract class ApiClient<
         ...options,
       },
       timeoutSeconds,
-      numRetries
+      numRetries,
     );
   }
 
@@ -250,7 +250,7 @@ export default abstract class ApiClient<
     body: T,
     options: TransportOptions = {},
     timeoutSeconds?: number,
-    numRetries?: number
+    numRetries?: number,
   ) {
     return this.transport<T, E>(
       url,
@@ -260,7 +260,7 @@ export default abstract class ApiClient<
         ...options,
       },
       timeoutSeconds,
-      numRetries
+      numRetries,
     );
   }
 }

@@ -1,21 +1,16 @@
-import Hexagon from './Hexagon';
+import Hexagon from "./Hexagon";
 
 interface LettersProps {
   setLetter: (arg: string) => void;
   isShuffling?: boolean;
-  centerLetter: string | undefined;
+  centerLetter: string;
   outerLetters: string[];
   letterIndex: number[];
 }
 
 export default function Letters(props: LettersProps) {
-  const {
-    setLetter,
-    centerLetter = undefined,
-    outerLetters = [],
-    letterIndex,
-    isShuffling,
-  } = props;
+  const { setLetter, centerLetter, outerLetters, letterIndex, isShuffling } =
+    props;
   return (
     <div data-testid="letters-div" className="hive">
       <Hexagon

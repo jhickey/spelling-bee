@@ -1,30 +1,28 @@
-import { useEffect, useState } from 'react';
-import Buttons from './Buttons';
-import Input from './Input';
-import Letters from './Letters';
+import { useMemo, useState } from "react";
+import Buttons from "./Buttons";
+import Input from "./Input";
+import Letters from "./Letters";
+import useGame from "../../hooks/useGame";
 
-interface InputIndexProps {
-  centerLetter: string;
-  outerLetters: string[];
-  enterWord: (word: string) => void;
-  inputWord: string;
-  setInputWord: (str: string) => void;
-  message: string | null;
-  hasError: boolean;
-}
-
-export default function InputIndex(props: InputIndexProps) {
+export default function InputIndex() {
   const {
-    message,
-    centerLetter,
-    outerLetters,
-    enterWord,
-    setInputWord,
+    gameState: { game },
     inputWord,
-    hasError,
-  } = props;
+    handleInput,
+    handleSubmit,
+    message,
+    error,
+  } = useGame();
+
   const [zeroToFive, setZeroToFive] = useState<number[]>([0, 1, 2, 3, 4, 5]);
   const [isShuffling, setIsShuffling] = useState<boolean>(false);
+
+  const outerLetters = useMemo(() => {
+    return game.letters
+      .filter((letter) => letter !== game.centerLetter)
+      .map((letter) => letter.toUpperCase());
+  }, [game.letters]);
+
   const shuffle = (): void => {
     setIsShuffling(true);
     setTimeout(() => {
@@ -36,7 +34,7 @@ export default function InputIndex(props: InputIndexProps) {
   };
 
   const backSpace = (): void => {
-    setInputWord(inputWord.slice(0, -1));
+    handleInput(inputWord.slice(0, -1));
   };
 
   return (
@@ -47,26 +45,26 @@ export default function InputIndex(props: InputIndexProps) {
         </div>
       )}
       <Input
-        hasError={hasError}
+        hasError={error}
         outerLetters={outerLetters}
-        centerLetter={centerLetter}
-        shuffle={() => shuffle()}
-        backSpace={() => backSpace()}
-        searchWord={(word) => enterWord(word)}
+        centerLetter={game.centerLetter}
+        shuffle={shuffle}
+        backSpace={backSpace}
+        searchWord={handleSubmit}
         userWord={inputWord}
-        setUserWord={(str) => setInputWord(str)}
+        setUserWord={handleInput}
       />
       <Letters
         letterIndex={zeroToFive}
-        centerLetter={centerLetter}
-        setLetter={(letter) => setInputWord(inputWord + letter)}
+        centerLetter={game.centerLetter}
+        setLetter={(letter) => handleInput(inputWord.concat(letter))}
         outerLetters={outerLetters}
         isShuffling={isShuffling}
       />
       <Buttons
-        shuffle={() => shuffle()}
-        clearWord={() => backSpace()}
-        searchWord={() => enterWord(inputWord)}
+        shuffle={shuffle}
+        clearWord={backSpace}
+        searchWord={() => handleSubmit(inputWord)}
       />
     </div>
   );

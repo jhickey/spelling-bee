@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import FullList from './FullList';
+import { useState } from "react";
+import FullList from "./FullList";
 import {
   Accordion,
   AccordionDetails,
@@ -9,13 +9,12 @@ import {
   Fade,
   Stack,
   Typography,
-} from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import useStore from '../../useStore';
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import useGame from "../../hooks/useGame";
 
 export const capitalize = (word: string): string => {
-  const capitalized = word;
-  const arr = capitalized.split('');
+  const arr = word.split("");
   let newWord = arr[0].toUpperCase();
   for (let i = 1; i < arr.length; i++) {
     newWord = newWord + arr[i].toLowerCase();
@@ -24,7 +23,9 @@ export const capitalize = (word: string): string => {
 };
 
 export default function WordList() {
-  const { foundWords } = useStore();
+  const {
+    gameState: { session },
+  } = useGame();
   const [showList, setShowList] = useState(false);
 
   return (
@@ -35,28 +36,30 @@ export default function WordList() {
           aria-controls="panel1a-content"
           id="panel1a-header"
           sx={{
-            overflow: 'hidden',
-            justifyContent: 'flex-start',
+            overflow: "hidden",
+            justifyContent: "flex-start",
           }}
         >
           {showList ? (
             <Fade in>
-              <Typography>You have found {foundWords.length} words</Typography>
+              <Typography>
+                You have found {session.words.length} words
+              </Typography>
             </Fade>
           ) : (
             <Box
               sx={{
-                maxWidth: '95%',
+                maxWidth: "95%",
               }}
             >
               <Stack
                 direction="row"
                 spacing={1}
                 sx={{
-                  overflow: 'hidden',
+                  overflow: "hidden",
                 }}
               >
-                {foundWords.map((word) => {
+                {session.words.map((word) => {
                   return (
                     <Fade key={word.id} in timeout={1500}>
                       <Box>

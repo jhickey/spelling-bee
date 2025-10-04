@@ -1,23 +1,24 @@
-import HintsGrid from '../../utils/HintsGrid';
-import useStore from '../../useStore';
-import { useEffect, useState } from 'react';
-import HintsTable from './HintsTable';
-import HintsStartingLetters from './HintsStartingLetters';
-import { Box, Typography } from '@mui/material';
+import HintsGrid from "../../utils/HintsGrid";
+import { useEffect, useState } from "react";
+import HintsTable from "./HintsTable";
+import HintsStartingLetters from "./HintsStartingLetters";
+import { Box, Typography } from "@mui/material";
+import useGame from "../../hooks/useGame";
 
 export default function Hints() {
-  const { answers, foundWords, validLetters, pangrams, getPoints, userPoints } =
-    useStore();
+  const {
+    gameState: { game, session, pangrams, userPoints, totalPoints },
+  } = useGame();
   const [hints, setHints] = useState(null);
 
   useEffect(() => {
     const hintsGrid = new HintsGrid({
-      answers,
-      foundWords,
-      validLetters,
+      answers: game.answers,
+      foundWords: session.words,
+      validLetters: game.letters,
     });
     setHints(hintsGrid.getData());
-  }, [foundWords.length]);
+  }, [session.words.length]);
 
   return (
     <Box>
@@ -25,10 +26,10 @@ export default function Hints() {
         Hints
       </Typography>
       <Typography variant="subtitle1">
-        {foundWords.length}/{answers.length} words
+        {session.words.length}/{game.answers.length} words
       </Typography>
       <Typography variant="subtitle1">
-        {userPoints}/{getPoints()} points
+        {userPoints}/{totalPoints} points
       </Typography>
       <Typography variant="subtitle1" gutterBottom>
         {hints?.pangramCounts[2]}/{pangrams.length} pangrams (

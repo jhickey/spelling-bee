@@ -1,9 +1,11 @@
-import useStore from '../useStore';
-import { rankingLevels } from '../constants';
-import { calculateRankingPoints } from '../utils/game';
+import { rankingLevels } from "../constants";
+import { calculateRankingPoints } from "../utils/game";
+import useGame from "../hooks/useGame";
 
 export default function Rankings() {
-  const { getPoints } = useStore();
+  const {
+    gameState: { totalPoints },
+  } = useGame();
 
   return (
     <div>
@@ -15,7 +17,7 @@ export default function Rankings() {
           <li key={rankingLevel.name}>
             {rankingLevel.name} (
             <span className="font-medium">
-              {calculateRankingPoints(rankingLevel.multiplier, getPoints())}
+              {calculateRankingPoints(rankingLevel.multiplier, totalPoints)}
             </span>
             )
           </li>

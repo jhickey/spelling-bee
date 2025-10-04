@@ -1,11 +1,9 @@
-import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
-import usePastGames from '../hooks/usePastGames';
-import { PickersDay, PickersDayProps } from '@mui/x-date-pickers/PickersDay';
-import { Badge } from '@mui/material';
-import { Game } from '@prisma/client';
-import { isSameDay } from 'date-fns';
-import Link from 'next/link';
-import { TZDate } from '@date-fns/tz';
+import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
+import usePastGames from "../hooks/usePastGames";
+import { PickersDay, PickersDayProps } from "@mui/x-date-pickers/PickersDay";
+import { Badge } from "@mui/material";
+import { Game } from "@prisma/client";
+import { Link } from "@tanstack/react-router";
 
 function GameDay(props: PickersDayProps & { games?: Game[] }) {
   const { games = [], day, outsideCurrentMonth, ...other } = props;
@@ -15,11 +13,11 @@ function GameDay(props: PickersDayProps & { games?: Game[] }) {
   // console.log(gameForDay);
 
   return (
-    <Link href={gameForDay ? `/game/${gameForDay.id}` : '#'}>
+    <Link to="/game/$gameId" params={{ gameId: gameForDay?.id || "latest" }}>
       <Badge
         key={props.day.toString()}
         overlap="circular"
-        badgeContent={gameForDay ? '🟢' : undefined}
+        badgeContent={gameForDay ? "🟢" : undefined}
       >
         <PickersDay
           {...other}

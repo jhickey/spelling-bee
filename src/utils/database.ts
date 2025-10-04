@@ -1,8 +1,13 @@
-import { Game, GameSession, PrismaClient, Word } from '@prisma/client';
-import { AnswersSchema, LettersSchema } from '../schemas/database';
-import { getWordsApiClient } from '../clients/WordsApiClient';
-import logger from './logger';
-import { TransportError } from '../clients/ApiClient';
+import { Game, PrismaClient, Word } from "@prisma/client";
+import {
+  AnswersSchema,
+  GameSchema,
+  GameSessionSchema,
+  LettersSchema,
+} from "../schemas/database";
+import { getWordsApiClient } from "../clients/WordsApiClient";
+import logger from "./logger";
+import { TransportError } from "../clients/ApiClient";
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
@@ -10,20 +15,22 @@ const globalForPrisma = globalThis as unknown as {
 
 export const prisma = globalForPrisma.prisma ?? new PrismaClient();
 
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
+if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
 
 export async function getGame(gameId: string) {
-  return prisma.game.findUnique({
+  const game = await prisma.game.findUnique({
     where: { id: gameId },
     include: { answers: true },
   });
+  return game ? GameSchema.parse(game) : null;
 }
 
 export async function getLatestGame() {
-  return prisma.game.findFirst({
-    orderBy: { date: 'desc' },
+  const game = await prisma.game.findFirst({
+    orderBy: { date: "desc" },
     include: { answers: true },
   });
+  return GameSchema.parse(game);
 }
 
 export async function createGame(gameData: {
@@ -61,7 +68,7 @@ export async function createGame(gameData: {
           logger.warn(`Word not found in WordsAPI: "${answer}"`);
         } else {
           logger.error(
-            `Error looking up word frequency for "${answer}": ${e.message}`
+            `Error looking up word frequency for "${answer}": ${e.message}`,
           );
         }
       }
@@ -100,10 +107,6 @@ export async function createGame(gameData: {
   });
 }
 
-type GameSessionWithWords = GameSession & {
-  words: Word[];
-};
-
 export async function getSession({
   gameId,
   userId,
@@ -111,12 +114,13 @@ export async function getSession({
   gameId: string;
   userId: string;
 }) {
-  return prisma.gameSession.findUnique({
+  const gameSession = await prisma.gameSession.findUnique({
     where: { userId_gameId: { userId, gameId } },
     include: {
       words: true,
     },
   });
+  return GameSessionSchema.parse(gameSession);
 }
 
 export async function upsertGameSession({

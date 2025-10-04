@@ -1,5 +1,9 @@
 import { RankingLevel } from './types';
 
+export const MAX_WORD_LENGTH = 20;
+export const MIN_WORD_LENGTH = 4;
+export const ANIMATION_DURATION = 750;
+
 export const rankingLevels: RankingLevel[] = [
   {
     name: 'Beginner',

@@ -1,4 +1,4 @@
-import { StartingLetters } from '../../utils/HintsGrid';
+import { StartingLetters } from "../../utils/HintsGrid";
 
 interface HintsStartingLettersProps {
   startingLetters: StartingLetters;
@@ -30,7 +30,7 @@ export default function HintsStartingLetters({
       return acc;
     }, {});
   return (
-    <div style={{ marginTop: '15px' }}>
+    <div style={{ marginTop: "15px" }}>
       {Object.values(groupedStartingLetters).map((gsl, i) => {
         return (
           <div key={`gsl_${i}`}>
@@ -38,7 +38,7 @@ export default function HintsStartingLetters({
               return (
                 <span
                   key={`sl_${j}`}
-                  className={`mr-3 ${g.allFound && 'text-green-600'}`}
+                  className={`mr-3 ${g.allFound && "text-green-600"}`}
                 >
                   {g.letters.toUpperCase()}: {g.found}/{g.count}
                 </span>

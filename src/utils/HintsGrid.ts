@@ -1,5 +1,5 @@
-import { calculatePangram, getRange } from './game';
-import { Word } from '@prisma/client';
+import { calculatePangram, getRange } from "./game";
+import { ZWord } from "../schemas/database";
 
 type LengthColumns = number[];
 type LengthSums = number[][];
@@ -20,8 +20,8 @@ export interface HintsData {
 }
 
 export interface GameData {
-  answers: Word[];
-  foundWords: Word[];
+  answers: ZWord[];
+  foundWords: ZWord[];
   validLetters: string[];
 }
 
@@ -60,23 +60,26 @@ export default class HintsGrid {
         }
         return num;
       },
-      [0, 0, 0]
+      [0, 0, 0],
     );
   }
 
   private getStartingLetters(): StartingLetters {
     // TODO clean this way up
-    const theStartingLetters = this.gameData.answers.reduce((acc, answer) => {
-      const firstTwo = answer.value.substr(0, 2);
-      if (!acc[firstTwo]) {
-        acc[firstTwo] = 0;
-      }
-      acc[firstTwo]++;
-      return acc;
-    }, {} as { [letter: string]: number });
+    const theStartingLetters = this.gameData.answers.reduce(
+      (acc, answer) => {
+        const firstTwo = answer.value.substr(0, 2);
+        if (!acc[firstTwo]) {
+          acc[firstTwo] = 0;
+        }
+        acc[firstTwo]++;
+        return acc;
+      },
+      {} as { [letter: string]: number },
+    );
     return Object.entries(theStartingLetters).map(([sl, slCount]) => {
       const slFound = this.gameData.foundWords.filter((a) =>
-        a.value.startsWith(sl)
+        a.value.startsWith(sl),
       ).length;
       return [sl, slCount, slFound];
     });
@@ -93,7 +96,7 @@ export default class HintsGrid {
     return validLetters.reduce<LetterGrid>((acc, letter) => {
       const letterCount = this.lengthColumns.map((l) => {
         return answers.reduce((count, a) => {
-          const firstLetter = a.value.split('')[0];
+          const firstLetter = a.value.split("")[0];
           if (firstLetter === letter && a.value.length === l) {
             count++;
           }
@@ -102,7 +105,9 @@ export default class HintsGrid {
       });
       acc[letter] = letterCount.map((lc, i) => {
         const foundCount = this.gameData.foundWords.filter((a) => {
-          return a[0] === letter && a.value.length === this.lengthColumns[i];
+          return (
+            a.value[0] === letter && a.value.length === this.lengthColumns[i]
+          );
         }).length;
         return [lc, foundCount];
       });
@@ -122,7 +127,7 @@ export default class HintsGrid {
     }
     return arr.map((sum, i) => {
       const found = this.gameData.foundWords.filter(
-        (ua) => ua.value.length === this.lengthColumns[i]
+        (ua) => ua.value.length === this.lengthColumns[i],
       ).length;
       return [sum, found];
     }) as LengthSums;
