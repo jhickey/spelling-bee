@@ -1,12 +1,10 @@
 /// <reference types="vite/client" />
-
 import {
   Outlet,
   createRootRoute,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-
 import appCss from "../styles/globals.css?url";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
@@ -20,6 +18,7 @@ export const Route = createRootRoute({
         content: "width=device-width, initial-scale=1",
       },
       { title: "TanStack Start Starter" },
+      { name: "emotion-insertion-point", content: "" },
     ],
     links: [{ rel: "stylesheet", href: appCss }],
   }),
