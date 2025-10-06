@@ -67,7 +67,7 @@ export default function InputIndex({
       />
       <Letters
         letterIndex={zeroToFive}
-        centerLetter={game.centerLetter}
+        centerLetter={game.centerLetter.toUpperCase()}
         setLetter={(letter) => handleInput(inputWord.concat(letter))}
         outerLetters={outerLetters}
         isShuffling={isShuffling}
