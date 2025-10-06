@@ -1,5 +1,5 @@
-import ApiClient from './ApiClient';
-import z from 'zod';
+import ApiClient from "./ApiClient";
+import z from "zod";
 
 const WordFrequencySchema = z.object({
   word: z.string(),
@@ -22,13 +22,13 @@ interface WordApiErrorResponse {
 export class WordsApiClient extends ApiClient {
   constructor() {
     if (!process.env.WORDS_API_KEY) {
-      throw new Error('Missing WORDS_API_KEY');
+      throw new Error("Missing WORDS_API_KEY");
     }
     super({
-      apiHost: 'https://wordsapiv1.p.rapidapi.com',
-      apiPath: '/words',
+      apiHost: "https://wordsapiv1.p.rapidapi.com",
+      apiPath: "/words",
       headers: {
-        'x-rapidapi-key': process.env.WORDS_API_KEY,
+        "x-rapidapi-key": process.env.WORDS_API_KEY,
       },
     });
   }

@@ -1,10 +1,5 @@
 import { Game, PrismaClient, Word } from "@prisma/client";
-import {
-  AnswersSchema,
-  GameSchema,
-  GameSessionSchema,
-  LettersSchema,
-} from "../schemas/database";
+import { AnswersSchema, GameSchema, LettersSchema } from "../schemas/database";
 import { getWordsApiClient } from "../clients/WordsApiClient";
 import logger from "./logger";
 import { TransportError } from "../clients/ApiClient";
@@ -114,13 +109,25 @@ export async function getSession({
   gameId: string;
   userId: string;
 }) {
-  const gameSession = await prisma.gameSession.findUnique({
+  const session = await prisma.gameSession.findUnique({
     where: { userId_gameId: { userId, gameId } },
     include: {
       words: true,
     },
   });
-  return GameSessionSchema.parse(gameSession);
+
+  return (
+    session ||
+    prisma.gameSession.create({
+      data: {
+        userId,
+        gameId,
+      },
+      include: {
+        words: true,
+      },
+    })
+  );
 }
 
 export async function upsertGameSession({

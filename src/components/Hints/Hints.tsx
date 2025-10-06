@@ -1,4 +1,4 @@
-import HintsGrid from "../../utils/HintsGrid";
+import HintsGrid, { HintsData } from "../../utils/HintsGrid";
 import { useEffect, useState } from "react";
 import HintsTable from "./HintsTable";
 import HintsStartingLetters from "./HintsStartingLetters";
@@ -7,9 +7,16 @@ import useGame from "../../hooks/useGame";
 
 export default function Hints() {
   const {
-    gameState: { game, session, pangrams, userPoints, totalPoints },
+    game,
+    session,
+    gameState: { pangrams, userPoints, totalPoints },
   } = useGame();
-  const [hints, setHints] = useState(null);
+
+  const [hints, setHints] = useState<HintsData | null>(null);
+
+  if (!game || !session) {
+    return null;
+  }
 
   useEffect(() => {
     const hintsGrid = new HintsGrid({

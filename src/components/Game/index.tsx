@@ -4,15 +4,26 @@ import Input from "./Input";
 import Letters from "./Letters";
 import useGame from "../../hooks/useGame";
 
-export default function InputIndex() {
-  const {
-    gameState: { game },
-    inputWord,
-    handleInput,
-    handleSubmit,
-    message,
-    error,
-  } = useGame();
+interface InputIndexProps {
+  inputWord: string;
+  handleInput: (word: string) => void;
+  handleSubmit: (word: string) => void;
+  error: boolean;
+  message: string;
+}
+
+export default function InputIndex({
+  inputWord,
+  handleInput,
+  handleSubmit,
+  message,
+  error,
+}: InputIndexProps) {
+  const { game } = useGame();
+
+  if (!game) {
+    return null;
+  }
 
   const [zeroToFive, setZeroToFive] = useState<number[]>([0, 1, 2, 3, 4, 5]);
   const [isShuffling, setIsShuffling] = useState<boolean>(false);

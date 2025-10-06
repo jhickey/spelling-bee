@@ -23,9 +23,7 @@ export const capitalize = (word: string): string => {
 };
 
 export default function WordList() {
-  const {
-    gameState: { session },
-  } = useGame();
+  const { session } = useGame();
   const [showList, setShowList] = useState(false);
 
   return (
@@ -43,7 +41,7 @@ export default function WordList() {
           {showList ? (
             <Fade in>
               <Typography>
-                You have found {session.words.length} words
+                You have found {session?.words.length ?? 0} words
               </Typography>
             </Fade>
           ) : (
@@ -59,7 +57,7 @@ export default function WordList() {
                   overflow: "hidden",
                 }}
               >
-                {session.words.map((word) => {
+                {session?.words.map((word) => {
                   return (
                     <Fade key={word.id} in timeout={1500}>
                       <Box>

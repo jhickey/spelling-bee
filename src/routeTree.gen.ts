@@ -15,8 +15,6 @@ import { Route as GameGameIdRouteImport } from './routes/game.$gameId'
 import { Route as AuthSigninRouteImport } from './routes/auth/signin'
 import { Route as AuthErrorRouteImport } from './routes/auth/error'
 import { Route as ApiGameRouteImport } from './routes/api/game'
-import { Route as ApiArchiveRouteImport } from './routes/api/archive'
-import { Route as ApiSessionGameIdRouteImport } from './routes/api/session.$gameId'
 import { Route as ApiAuthProviderRouteImport } from './routes/api/auth.$provider'
 
 const UnauthorizedRoute = UnauthorizedRouteImport.update({
@@ -49,16 +47,6 @@ const ApiGameRoute = ApiGameRouteImport.update({
   path: '/api/game',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiArchiveRoute = ApiArchiveRouteImport.update({
-  id: '/api/archive',
-  path: '/api/archive',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiSessionGameIdRoute = ApiSessionGameIdRouteImport.update({
-  id: '/api/session/$gameId',
-  path: '/api/session/$gameId',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ApiAuthProviderRoute = ApiAuthProviderRouteImport.update({
   id: '/api/auth/$provider',
   path: '/api/auth/$provider',
@@ -68,83 +56,69 @@ const ApiAuthProviderRoute = ApiAuthProviderRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/unauthorized': typeof UnauthorizedRoute
-  '/api/archive': typeof ApiArchiveRoute
   '/api/game': typeof ApiGameRoute
   '/auth/error': typeof AuthErrorRoute
   '/auth/signin': typeof AuthSigninRoute
   '/game/$gameId': typeof GameGameIdRoute
   '/api/auth/$provider': typeof ApiAuthProviderRoute
-  '/api/session/$gameId': typeof ApiSessionGameIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/unauthorized': typeof UnauthorizedRoute
-  '/api/archive': typeof ApiArchiveRoute
   '/api/game': typeof ApiGameRoute
   '/auth/error': typeof AuthErrorRoute
   '/auth/signin': typeof AuthSigninRoute
   '/game/$gameId': typeof GameGameIdRoute
   '/api/auth/$provider': typeof ApiAuthProviderRoute
-  '/api/session/$gameId': typeof ApiSessionGameIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/unauthorized': typeof UnauthorizedRoute
-  '/api/archive': typeof ApiArchiveRoute
   '/api/game': typeof ApiGameRoute
   '/auth/error': typeof AuthErrorRoute
   '/auth/signin': typeof AuthSigninRoute
   '/game/$gameId': typeof GameGameIdRoute
   '/api/auth/$provider': typeof ApiAuthProviderRoute
-  '/api/session/$gameId': typeof ApiSessionGameIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/unauthorized'
-    | '/api/archive'
     | '/api/game'
     | '/auth/error'
     | '/auth/signin'
     | '/game/$gameId'
     | '/api/auth/$provider'
-    | '/api/session/$gameId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/unauthorized'
-    | '/api/archive'
     | '/api/game'
     | '/auth/error'
     | '/auth/signin'
     | '/game/$gameId'
     | '/api/auth/$provider'
-    | '/api/session/$gameId'
   id:
     | '__root__'
     | '/'
     | '/unauthorized'
-    | '/api/archive'
     | '/api/game'
     | '/auth/error'
     | '/auth/signin'
     | '/game/$gameId'
     | '/api/auth/$provider'
-    | '/api/session/$gameId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   UnauthorizedRoute: typeof UnauthorizedRoute
-  ApiArchiveRoute: typeof ApiArchiveRoute
   ApiGameRoute: typeof ApiGameRoute
   AuthErrorRoute: typeof AuthErrorRoute
   AuthSigninRoute: typeof AuthSigninRoute
   GameGameIdRoute: typeof GameGameIdRoute
   ApiAuthProviderRoute: typeof ApiAuthProviderRoute
-  ApiSessionGameIdRoute: typeof ApiSessionGameIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -191,20 +165,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiGameRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/archive': {
-      id: '/api/archive'
-      path: '/api/archive'
-      fullPath: '/api/archive'
-      preLoaderRoute: typeof ApiArchiveRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/session/$gameId': {
-      id: '/api/session/$gameId'
-      path: '/api/session/$gameId'
-      fullPath: '/api/session/$gameId'
-      preLoaderRoute: typeof ApiSessionGameIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/api/auth/$provider': {
       id: '/api/auth/$provider'
       path: '/api/auth/$provider'
@@ -218,13 +178,11 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   UnauthorizedRoute: UnauthorizedRoute,
-  ApiArchiveRoute: ApiArchiveRoute,
   ApiGameRoute: ApiGameRoute,
   AuthErrorRoute: AuthErrorRoute,
   AuthSigninRoute: AuthSigninRoute,
   GameGameIdRoute: GameGameIdRoute,
   ApiAuthProviderRoute: ApiAuthProviderRoute,
-  ApiSessionGameIdRoute: ApiSessionGameIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

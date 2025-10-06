@@ -48,7 +48,7 @@ export default function Hexagon(props: HexagonProps) {
       >
         {letter}
       </text>
-      {showRemainingStarts && hints.remainingStarts[letter] && (
+      {showRemainingStarts && hints?.remainingStarts[letter] && (
         <text
           className={`remaining-start ${isShuffling && "shuffling"}`}
           x="35%"
@@ -58,7 +58,7 @@ export default function Hexagon(props: HexagonProps) {
           {hints.remainingStarts[letter]}
         </text>
       )}
-      {showRemainingTotals && hints.remainingTotals[letter] && (
+      {showRemainingTotals && hints?.remainingTotals[letter] && (
         <text
           className={`remaining-total ${isShuffling && "shuffling"}`}
           x="65%"

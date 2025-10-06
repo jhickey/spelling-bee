@@ -8,6 +8,7 @@ import {
 import appCss from "../styles/globals.css?url";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -29,6 +30,7 @@ export const Route = createRootRoute({
 });
 
 function RootLayout() {
+  const queryClient = new QueryClient();
   return (
     <html lang="en">
       <head>
@@ -36,9 +38,11 @@ function RootLayout() {
         <HeadContent />
       </head>
       <body>
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <Outlet />
-        </LocalizationProvider>
+        <QueryClientProvider client={queryClient}>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <Outlet />
+          </LocalizationProvider>
+        </QueryClientProvider>
         <Scripts />
       </body>
     </html>

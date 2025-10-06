@@ -3,12 +3,13 @@ import useGame from "@/hooks/useGame.ts";
 
 export default function FullList() {
   const {
-    gameState: { pangrams, session },
+    session,
+    gameState: { pangrams },
   } = useGame();
   return (
     <div className="w-full" data-testid="full-list-div">
       <div className="w-full flex flex-col flex-wrap ">
-        {session.words.length &&
+        {session?.words.length &&
           [...session.words].sort().map((i) => (
             <p
               key={i.id}
