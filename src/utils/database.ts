@@ -1,5 +1,10 @@
 import { Game, PrismaClient, Word } from "@prisma/client";
-import { AnswersSchema, GameSchema, LettersSchema } from "../schemas/database";
+import {
+  AnswersSchema,
+  GameSchema,
+  LettersSchema,
+  UserSettings,
+} from "../schemas/database";
 import { getWordsApiClient } from "../clients/WordsApiClient";
 import logger from "./logger";
 import { TransportError } from "../clients/ApiClient";
@@ -163,4 +168,13 @@ export async function upsertGameSession({
       },
     });
   }
+}
+
+export async function updateSettings(userId: string, settings: UserSettings) {
+  return prisma.user.update({
+    where: { id: userId },
+    data: {
+      settings,
+    },
+  });
 }

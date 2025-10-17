@@ -31,3 +31,18 @@ export const GameSchema = z
 export const LettersSchema = z.array(z.string()).length(7);
 
 export const AnswersSchema = z.array(z.string());
+
+export const SettingsSchema = z.preprocess(
+  (val) => {
+    if (typeof val === "object" && val !== null) {
+      return val;
+    }
+    return {};
+  },
+  z.object({
+    showStartingLetterHints: z.number().default(7),
+    showRemainingLetterHints: z.number().default(8),
+  }),
+);
+
+export type UserSettings = z.infer<typeof SettingsSchema>;

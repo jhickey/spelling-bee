@@ -10,10 +10,11 @@ import {
   getServerGameSession,
   getServerGameState,
   updateGameSession,
-} from "@/gameState";
+} from "@/serverFns.ts";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "@tanstack/react-router";
+import { useUser } from "@/hooks/useUser.ts";
 
 export interface Hints {
   remainingStarts: Record<string, number>;
@@ -56,6 +57,7 @@ export default function useGame() {
     queryFn: () => getSession({ data: { gameId: game?.id || "" } }),
     enabled: !!game?.id,
   });
+  const { data: userData } = useUser();
 
   const { mutate } = useMutation({
     mutationFn: (data: { gameId: string; words: ZWord[] }) =>
@@ -95,10 +97,14 @@ export default function useGame() {
 
   const { showRemainingStarts, showRemainingTotals } = useMemo(() => {
     return {
-      showRemainingStarts: rankingLevel.index >= 4,
-      showRemainingTotals: rankingLevel.index >= 8,
+      showRemainingStarts: userData?.settings
+        ? rankingLevel.index >= userData.settings.showStartingLetterHints
+        : false,
+      showRemainingTotals: userData?.settings
+        ? rankingLevel.index >= userData.settings.showRemainingLetterHints
+        : false,
     };
-  }, [rankingLevel.index]);
+  }, [rankingLevel.index, userData?.settings]);
 
   const gameState: GameState = {
     userPoints,

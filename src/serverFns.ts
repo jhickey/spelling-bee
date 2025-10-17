@@ -4,16 +4,35 @@ import {
   getLatestGame,
   getSession,
   prisma,
+  updateSettings,
   upsertGameSession,
 } from "./utils/database";
 import z from "zod";
 import { notFound } from "@tanstack/react-router";
 import authMiddleware from "@/middleware/authMiddleware.ts";
-import { WordSchema } from "@/schemas/database.ts";
+import { SettingsSchema, WordSchema } from "@/schemas/database.ts";
 
 const GameStateRequestSchema = z.object({
   gameId: z.string().optional(),
 });
+
+export const getServerUser = createServerFn()
+  .middleware([authMiddleware])
+  .handler(async ({ context }) => {
+    const { userId } = context;
+    const user = await prisma.user.findUniqueOrThrow({
+      where: { id: userId },
+    });
+    return { ...user, settings: SettingsSchema.parse(user.settings) };
+  });
+
+export const updateServerUserSettings = createServerFn()
+  .inputValidator(SettingsSchema)
+  .middleware([authMiddleware])
+  .handler(async ({ context, data }) => {
+    const { userId } = context;
+    return updateSettings(userId, data);
+  });
 
 export const getServerGameState = createServerFn()
   .middleware([authMiddleware])

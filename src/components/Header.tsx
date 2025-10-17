@@ -1,4 +1,5 @@
 import { BsLightbulb, BsCalendar3 } from "react-icons/bs";
+import { IoSettingsSharp } from "react-icons/io5";
 import { format } from "date-fns";
 
 interface HeaderProps {
@@ -47,6 +48,13 @@ export default function Header(props: HeaderProps) {
           onClick={() => setShowMenu("hints")}
         >
           <BsLightbulb />
+        </button>
+        <button
+          className="hover:bg-gray-100 active:bg-gray-200 text-2xl m-2 w-10 h-10 rounded-full flex items-center justify-center"
+          data-testid="menu-icon"
+          onClick={() => setShowMenu("settings")}
+        >
+          <IoSettingsSharp />
         </button>
       </div>
     </div>

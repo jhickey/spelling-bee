@@ -21,7 +21,7 @@ export default function Hexagon(props: HexagonProps) {
   };
   return (
     <svg
-      className={`hive-cell outer`}
+      className="hive-cell outer"
       viewBox="0 0 120 103.92304845413263"
       data-testid="hive-cell"
       onMouseDown={() => {

@@ -65,24 +65,3 @@ export function getHints(foundWords: ZWord[], answers: ZWord[]): Hints {
       { remainingStarts: {}, remainingTotals: {} },
     );
 }
-
-interface ModelWithDates {
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-export function serializeDates<T extends ModelWithDates>(obj: T | T[]) {
-  if (Array.isArray(obj)) {
-    return obj.map((item) => ({
-      ...item,
-      createdAt: item.createdAt.toISOString(),
-      updatedAt: item.updatedAt.toISOString(),
-    }));
-  } else {
-    return {
-      ...obj,
-      createdAt: obj.createdAt.toISOString(),
-      updatedAt: obj.updatedAt.toISOString(),
-    };
-  }
-}

@@ -9,13 +9,14 @@ import Realistic from "./Realistic";
 import Encouragement from "./Encouragement";
 import Modal from "./Modal";
 import Calendar from "./Calendar";
+import Settings from "./Settings";
 import useGame from "../hooks/useGame";
 import {
   ANIMATION_DURATION,
   MAX_WORD_LENGTH,
   MIN_WORD_LENGTH,
-} from "@/constants.ts";
-import { calculatePoints } from "@/utils/game.ts";
+} from "@/constants";
+import { calculatePoints } from "@/utils/game";
 
 export default function GameIndex() {
   const { game, session, gameState, updateSession } = useGame();
@@ -111,6 +112,12 @@ export default function GameIndex() {
         onClose={() => setShowMenuItem("")}
       >
         <Calendar />
+      </Modal>
+      <Modal
+        open={showMenuItem === "settings"}
+        onClose={() => setShowMenuItem("")}
+      >
+        <Settings />
       </Modal>
       <Realistic reaction={reaction} />
       <div className="flex flex-col md:flex-row-reverse w-full">

@@ -1,53 +1,65 @@
-import { RankingLevel } from './types';
+import { RankingLevel } from "./types";
 
 export const MAX_WORD_LENGTH = 20;
 export const MIN_WORD_LENGTH = 4;
 export const ANIMATION_DURATION = 750;
 
+enum RankingLevelIndex {
+  Beginner,
+  GoodStart,
+  MovingUp,
+  Good,
+  Solid,
+  Nice,
+  Great,
+  Amazing,
+  Genius,
+}
+
 export const rankingLevels: RankingLevel[] = [
   {
-    name: 'Beginner',
+    name: "Beginner",
     multiplier: 0,
-    index: 0,
+    index: RankingLevelIndex.Beginner,
   },
   {
-    name: 'Good Start',
+    name: "Good Start",
     multiplier: 2,
-    index: 1,
+    index: RankingLevelIndex.GoodStart,
   },
   {
-    name: 'Moving Up',
+    name: "Moving Up",
     multiplier: 5,
-    index: 2,
+    index: RankingLevelIndex.MovingUp,
   },
   {
-    name: 'Good',
+    name: "Good",
     multiplier: 8,
-    index: 3,
+    index: RankingLevelIndex.Good,
   },
   {
-    name: 'Solid',
+    name: "Solid",
     multiplier: 15,
-    index: 4,
+    index: RankingLevelIndex.Solid,
   },
   {
-    name: 'Nice',
+    name: "Nice",
     multiplier: 25,
-    index: 5,
+    index: RankingLevelIndex.Nice,
   },
   {
-    name: 'Great',
+    name: "Great",
     multiplier: 40,
-    index: 6,
+    index: RankingLevelIndex.Great,
   },
   {
-    name: 'Amazing',
+    name: "Amazing",
     multiplier: 50,
-    index: 7,
+    index: RankingLevelIndex.Amazing,
   },
   {
-    name: 'Genius',
+    name: "Genius",
     multiplier: 70,
-    index: 8,
+    index: RankingLevelIndex.Genius,
   },
 ];
