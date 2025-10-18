@@ -29,7 +29,7 @@ export default function Hexagon(props: HexagonProps) {
     return hints?.remainingTotals[letter] ?? 0;
   }, [hints, letter]);
 
-  const showLetterUsedUp = data?.settings.showLetterUsedUp ?? true;
+  const showLetterDepleted = data?.settings.showLetterDepleted ?? true;
 
   return (
     <svg
@@ -55,7 +55,7 @@ export default function Hexagon(props: HexagonProps) {
       <text
         className={cn(
           "cell-letter",
-          showLetterUsedUp && remainingStart === 0 && remainingTotal === 0
+          showLetterDepleted && remainingStart === 0 && remainingTotal === 0
             ? "opacity-25"
             : "opacity-100",
           {

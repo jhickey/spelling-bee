@@ -17,7 +17,7 @@ export default function Settings() {
     defaultValues: {
       showStartingLetterHints: data?.settings.showStartingLetterHints ?? 0,
       showRemainingLetterHints: data?.settings.showRemainingLetterHints ?? 0,
-      showLetterUsedUp: data?.settings.showLetterUsedUp ?? true,
+      showLetterDepleted: data?.settings.showLetterDepleted ?? true,
     },
     onSubmit: async ({ value }) => {
       updateSettings.mutate({
@@ -88,7 +88,7 @@ export default function Settings() {
           </FormControl>
           <FormControl fullWidth>
             <form.Field
-              name="showLetterUsedUp"
+              name="showLetterDepleted"
               children={(field) => {
                 return (
                   <FormControlLabel

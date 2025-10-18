@@ -42,7 +42,7 @@ export const SettingsSchema = z.preprocess(
   z.object({
     showStartingLetterHints: z.number().default(7),
     showRemainingLetterHints: z.number().default(8),
-    showLetterUsedUp: z.boolean().default(true),
+    showLetterDepleted: z.boolean().default(true),
   }),
 );
 
