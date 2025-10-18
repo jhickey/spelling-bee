@@ -1,5 +1,12 @@
 import { useForm } from "@tanstack/react-form";
-import { Container, FormControl, Stack, Typography } from "@mui/material";
+import {
+  Checkbox,
+  Container,
+  FormControl,
+  FormControlLabel,
+  Stack,
+  Typography,
+} from "@mui/material";
 import SettingRankSelect from "@/components/Settings/SettingRankSelect";
 import { useUser } from "@/hooks/useUser.ts";
 
@@ -10,6 +17,7 @@ export default function Settings() {
     defaultValues: {
       showStartingLetterHints: data?.settings.showStartingLetterHints ?? 0,
       showRemainingLetterHints: data?.settings.showRemainingLetterHints ?? 0,
+      showLetterUsedUp: data?.settings.showLetterUsedUp ?? true,
     },
     onSubmit: async ({ value }) => {
       updateSettings.mutate({
@@ -73,6 +81,24 @@ export default function Settings() {
                     onBlur={field.handleBlur}
                     onChange={(val) => field.handleChange(val)}
                     label="Show Remaining Letter Hints"
+                  />
+                );
+              }}
+            />
+          </FormControl>
+          <FormControl fullWidth>
+            <form.Field
+              name="showLetterUsedUp"
+              children={(field) => {
+                return (
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={field.state.value}
+                        onChange={(e) => field.handleChange(e.target.checked)}
+                      />
+                    }
+                    label="Grey out letters when depleted"
                   />
                 );
               }}

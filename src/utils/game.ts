@@ -41,7 +41,7 @@ export const calculatePoints = (wordList: ZWord[], validLetters: string[]) => {
 
 export function getHints(foundWords: ZWord[], answers: ZWord[]): Hints {
   const answersLeft = answers.filter(
-    (a) => !foundWords.map((f) => f.value).includes(a.value.toUpperCase()),
+    (a) => !foundWords.find((fw) => fw.value === a.value),
   );
   return answersLeft
     .map((a) => a.value.toUpperCase())

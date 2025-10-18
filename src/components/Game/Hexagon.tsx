@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import useGame from "@/hooks/useGame.ts";
+import cn from "classnames";
+import { useUser } from "@/hooks/useUser.ts";
 
 interface HexagonProps {
   center: boolean;
@@ -13,12 +15,22 @@ export default function Hexagon(props: HexagonProps) {
   const [isDown, setIsDown] = useState(false);
   const [isTouch, setIsTouch] = useState(false);
   const {
-    gameState: { hints, showRemainingStarts, showRemainingTotals },
+    gameState: { hints, showRemainingTotals, showRemainingStarts },
   } = useGame();
+  const { data } = useUser();
   const inputStart = () => {
     setLetter(letter);
     setIsDown(true);
   };
+  const remainingStart = useMemo(() => {
+    return hints?.remainingStarts[letter] ?? 0;
+  }, [hints, letter]);
+  const remainingTotal = useMemo(() => {
+    return hints?.remainingTotals[letter] ?? 0;
+  }, [hints, letter]);
+
+  const showLetterUsedUp = data?.settings.showLetterUsedUp ?? true;
+
   return (
     <svg
       className="hive-cell outer"
@@ -41,31 +53,39 @@ export default function Hexagon(props: HexagonProps) {
         strokeWidth="7.5"
       ></polygon>
       <text
-        className={`cell-letter ${isShuffling && "shuffling"}`}
+        className={cn(
+          "cell-letter",
+          showLetterUsedUp && remainingStart === 0 && remainingTotal === 0
+            ? "opacity-25"
+            : "opacity-100",
+          {
+            shuffling: isShuffling,
+          },
+        )}
         x="50%"
         y="50%"
         dy="0.35em"
       >
         {letter}
       </text>
-      {showRemainingStarts && hints?.remainingStarts[letter] && (
+      {showRemainingStarts && remainingStart && (
         <text
           className={`remaining-start ${isShuffling && "shuffling"}`}
           x="35%"
           y="75%"
           dy="0.35em"
         >
-          {hints.remainingStarts[letter]}
+          {remainingStart}
         </text>
       )}
-      {showRemainingTotals && hints?.remainingTotals[letter] && (
+      {showRemainingTotals && remainingTotal && (
         <text
           className={`remaining-total ${isShuffling && "shuffling"}`}
           x="65%"
           y="75%"
           dy="0.35em"
         >
-          {hints.remainingTotals[letter]}
+          {remainingTotal}
         </text>
       )}
     </svg>

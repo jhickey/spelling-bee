@@ -361,7 +361,6 @@
   text-anchor: middle;
   text-transform: uppercase;
   pointer-events: none;
-  opacity: 1;
   transition: opacity 200ms;
 }
 
