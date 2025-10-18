@@ -19,9 +19,9 @@ const GameStateRequestSchema = z.object({
 export const getServerUser = createServerFn()
   .middleware([authMiddleware])
   .handler(async ({ context }) => {
-    const { userId } = context;
+    const { session } = context;
     const user = await prisma.user.findUniqueOrThrow({
-      where: { id: userId },
+      where: { id: session.user.id },
     });
     return { ...user, settings: SettingsSchema.parse(user.settings) };
   });
@@ -30,8 +30,10 @@ export const updateServerUserSettings = createServerFn()
   .inputValidator(SettingsSchema)
   .middleware([authMiddleware])
   .handler(async ({ context, data }) => {
-    const { userId } = context;
-    return updateSettings(userId, data);
+    const {
+      session: { user },
+    } = context;
+    return updateSettings(user.id, data);
   });
 
 export const getServerGameState = createServerFn()
@@ -62,7 +64,7 @@ export const getServerGameSession = createServerFn()
   .middleware([authMiddleware])
   .handler(async ({ context, data: { gameId } }) => {
     return getSession({
-      userId: context.userId,
+      userId: context.session.user.id,
       gameId,
     });
   });
@@ -73,12 +75,12 @@ export const updateGameSession = createServerFn()
   .handler(async ({ context, data }) => {
     const { words, gameId } = data;
     await upsertGameSession({
-      userId: context.userId,
+      userId: context.session.user.id,
       gameId,
       words,
     });
     return await getSession({
-      userId: context.userId,
+      userId: context.session.user.id,
       gameId,
     });
   });

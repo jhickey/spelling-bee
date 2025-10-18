@@ -15,7 +15,7 @@ import { Route as GameGameIdRouteImport } from './routes/game.$gameId'
 import { Route as AuthSigninRouteImport } from './routes/auth/signin'
 import { Route as AuthErrorRouteImport } from './routes/auth/error'
 import { Route as ApiGameRouteImport } from './routes/api/game'
-import { Route as ApiAuthProviderRouteImport } from './routes/api/auth.$provider'
+import { Route as ApiAuthSplatRouteImport } from './routes/api/auth.$'
 
 const UnauthorizedRoute = UnauthorizedRouteImport.update({
   id: '/unauthorized',
@@ -47,9 +47,9 @@ const ApiGameRoute = ApiGameRouteImport.update({
   path: '/api/game',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiAuthProviderRoute = ApiAuthProviderRouteImport.update({
-  id: '/api/auth/$provider',
-  path: '/api/auth/$provider',
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -60,7 +60,7 @@ export interface FileRoutesByFullPath {
   '/auth/error': typeof AuthErrorRoute
   '/auth/signin': typeof AuthSigninRoute
   '/game/$gameId': typeof GameGameIdRoute
-  '/api/auth/$provider': typeof ApiAuthProviderRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -69,7 +69,7 @@ export interface FileRoutesByTo {
   '/auth/error': typeof AuthErrorRoute
   '/auth/signin': typeof AuthSigninRoute
   '/game/$gameId': typeof GameGameIdRoute
-  '/api/auth/$provider': typeof ApiAuthProviderRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -79,7 +79,7 @@ export interface FileRoutesById {
   '/auth/error': typeof AuthErrorRoute
   '/auth/signin': typeof AuthSigninRoute
   '/game/$gameId': typeof GameGameIdRoute
-  '/api/auth/$provider': typeof ApiAuthProviderRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -90,7 +90,7 @@ export interface FileRouteTypes {
     | '/auth/error'
     | '/auth/signin'
     | '/game/$gameId'
-    | '/api/auth/$provider'
+    | '/api/auth/$'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -99,7 +99,7 @@ export interface FileRouteTypes {
     | '/auth/error'
     | '/auth/signin'
     | '/game/$gameId'
-    | '/api/auth/$provider'
+    | '/api/auth/$'
   id:
     | '__root__'
     | '/'
@@ -108,7 +108,7 @@ export interface FileRouteTypes {
     | '/auth/error'
     | '/auth/signin'
     | '/game/$gameId'
-    | '/api/auth/$provider'
+    | '/api/auth/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -118,7 +118,7 @@ export interface RootRouteChildren {
   AuthErrorRoute: typeof AuthErrorRoute
   AuthSigninRoute: typeof AuthSigninRoute
   GameGameIdRoute: typeof GameGameIdRoute
-  ApiAuthProviderRoute: typeof ApiAuthProviderRoute
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -165,11 +165,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiGameRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/auth/$provider': {
-      id: '/api/auth/$provider'
-      path: '/api/auth/$provider'
-      fullPath: '/api/auth/$provider'
-      preLoaderRoute: typeof ApiAuthProviderRouteImport
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -182,7 +182,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthErrorRoute: AuthErrorRoute,
   AuthSigninRoute: AuthSigninRoute,
   GameGameIdRoute: GameGameIdRoute,
-  ApiAuthProviderRoute: ApiAuthProviderRoute,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
