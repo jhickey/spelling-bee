@@ -1,7 +1,11 @@
 import GameIndex from "../components";
 import { createFileRoute } from "@tanstack/react-router";
+import { getSessionOrRedirect } from "@/serverFns.ts";
 
 export const Route = createFileRoute("/game/$gameId")({
+  beforeLoad: async () => {
+    await getSessionOrRedirect();
+  },
   component: Game,
 });
 

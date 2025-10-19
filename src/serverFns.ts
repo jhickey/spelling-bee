@@ -94,3 +94,9 @@ export const getServerArchive = createServerFn()
       },
     });
   });
+
+export const getSessionOrRedirect = createServerFn()
+  .middleware([authMiddleware])
+  .handler(({ context }) => {
+    return context.session;
+  });
