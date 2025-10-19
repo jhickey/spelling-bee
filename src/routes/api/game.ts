@@ -21,7 +21,6 @@ export const Route = createFileRoute("/api/game")({
             ...data.pastPuzzles.lastWeek,
           ].map(async (day) => {
             const { answers, validLetters, centerLetter, printDate, id } = day;
-
             await createGame({
               answers,
               centerLetter,

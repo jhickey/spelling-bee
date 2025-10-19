@@ -86,6 +86,7 @@ model Game {
   centerLetter String        @map("center_letter")
   letters      Json
   date         DateTime
+  printDate    String       @map("print_date")
   sessions     GameSession[]
 
   createdAt DateTime @default(now()) @map("created_at")

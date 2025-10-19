@@ -22,6 +22,7 @@ export const GameSchema = z
   .object({
     id: z.string(),
     date: z.date(),
+    printDate: z.string(),
     letters: z.array(z.string().length(1)).length(7),
     centerLetter: z.string().length(1),
     answers: z.array(WordSchema),

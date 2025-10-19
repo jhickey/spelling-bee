@@ -2,13 +2,18 @@ import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { PickersDay, PickersDayProps } from "@mui/x-date-pickers/PickersDay";
 import { Badge } from "@mui/material";
 import { Game } from "@prisma/client";
-import { Link } from "@tanstack/react-router";
+import { Link, useParams } from "@tanstack/react-router";
 import { useArchives } from "@/hooks/useArchives.ts";
+import { isSameDay } from "date-fns";
+import { dateFromPrintDate } from "@/utils/game.ts";
 
 function GameDay(props: PickersDayProps & { games?: Game[] }) {
   const { games = [], day, outsideCurrentMonth, ...other } = props;
+  const { gameId } = useParams({ strict: false });
+
   const gameForDay = games.find((game) => {
-    return new Date(game.date).getDate() === day.getDate();
+    const gameDate = dateFromPrintDate(game.printDate);
+    return !outsideCurrentMonth && isSameDay(gameDate, day);
   });
 
   return (
@@ -17,6 +22,7 @@ function GameDay(props: PickersDayProps & { games?: Game[] }) {
         key={props.day.toString()}
         overlap="circular"
         badgeContent={gameForDay ? "🟢" : undefined}
+        className={gameForDay && gameForDay.id === gameId ? "bg-blue-400" : ""}
       >
         <PickersDay
           {...other}

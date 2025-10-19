@@ -1,6 +1,7 @@
 import { rankingLevels } from "../constants";
 import { Hints } from "../hooks/useGame";
 import { ZWord } from "../schemas/database";
+import { TZDate } from "@date-fns/tz";
 
 export const getRange = (start: number, end: number): number[] => {
   const arr = [];
@@ -64,4 +65,17 @@ export function getHints(foundWords: ZWord[], answers: ZWord[]): Hints {
       },
       { remainingStarts: {}, remainingTotals: {} },
     );
+}
+
+export function dateFromPrintDate(printDate: string): Date {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(printDate)) {
+    throw new Error("Invalid printDate");
+  }
+  const [printYear, printMonth, printDay] = printDate.split("-").map(Number);
+  return new TZDate(
+    printYear,
+    printMonth - 1,
+    printDay,
+    Intl.DateTimeFormat().resolvedOptions().timeZone,
+  );
 }

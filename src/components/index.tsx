@@ -16,7 +16,7 @@ import {
   MAX_WORD_LENGTH,
   MIN_WORD_LENGTH,
 } from "@/constants";
-import { calculatePoints } from "@/utils/game";
+import { calculatePoints, dateFromPrintDate } from "@/utils/game";
 
 export default function GameIndex() {
   const { game, session, gameState, updateSession } = useGame();
@@ -94,7 +94,10 @@ export default function GameIndex() {
 
   return (
     <div data-testid="game-index" className={"flex flex-col items-center"}>
-      <Header date={game.date} setShowMenu={setShowMenuItem} />
+      <Header
+        date={dateFromPrintDate(game.printDate)}
+        setShowMenu={setShowMenuItem}
+      />
       <Modal
         open={showMenuItem === "hints"}
         onClose={() => setShowMenuItem("")}

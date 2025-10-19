@@ -94,11 +94,12 @@ export async function createGame(gameData: {
       centerLetter: gameData.centerLetter,
       letters: validatedLetters,
       date: new Date(gameData.date),
+      printDate: gameData.date,
       nytId: gameData.nytId,
     },
     update: {
       answers: {
-        set: answers.map((a) => ({ id: a.id })),
+        connect: answers.map((a) => ({ id: a.id })),
       },
       centerLetter: gameData.centerLetter,
       letters: validatedLetters,
