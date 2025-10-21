@@ -11,6 +11,7 @@ import z from "zod";
 import { notFound } from "@tanstack/react-router";
 import authMiddleware from "@/middleware/authMiddleware.ts";
 import { SettingsSchema, WordSchema } from "@/schemas/database.ts";
+import { Prisma } from "@prisma/client";
 
 const GameStateRequestSchema = z.object({
   gameId: z.string().optional(),
@@ -85,12 +86,32 @@ export const updateGameSession = createServerFn()
     });
   });
 
+export type GameWithSessions = Prisma.GameGetPayload<{
+  include: {
+    sessions: {
+      include: {
+        words: true;
+      };
+    };
+  };
+}>;
+
 export const getServerArchive = createServerFn()
   .middleware([authMiddleware])
-  .handler(() => {
+  .handler(({ context }) => {
     return prisma.game.findMany({
       orderBy: {
         date: "desc",
+      },
+      include: {
+        sessions: {
+          where: {
+            userId: context.session.user.id,
+          },
+          include: {
+            words: true,
+          },
+        },
       },
     });
   });

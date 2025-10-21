@@ -1,40 +1,56 @@
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { PickersDay, PickersDayProps } from "@mui/x-date-pickers/PickersDay";
 import { Badge } from "@mui/material";
-import { Game } from "@prisma/client";
-import { Link, useParams } from "@tanstack/react-router";
+import { useParams } from "@tanstack/react-router";
 import { useArchives } from "@/hooks/useArchives.ts";
 import { isSameDay } from "date-fns";
 import { dateFromPrintDate } from "@/utils/game.ts";
+import { GameWithSessions } from "@/serverFns.ts";
 
-function GameDay(props: PickersDayProps & { games?: Game[] }) {
-  const { games = [], day, outsideCurrentMonth, ...other } = props;
+function GameDay(
+  props: PickersDayProps & {
+    games?: GameWithSessions[];
+    onSelectDate?: (gameId: string | undefined) => void;
+  },
+) {
+  const {
+    games = [],
+    onSelectDate,
+    day,
+    outsideCurrentMonth,
+    ...other
+  } = props;
   const { gameId } = useParams({ strict: false });
 
   const gameForDay = games.find((game) => {
     const gameDate = dateFromPrintDate(game.printDate);
     return !outsideCurrentMonth && isSameDay(gameDate, day);
   });
+  const hasStarted = gameForDay?.sessions[0]?.words?.length ?? 0 > 0;
 
   return (
-    <Link to="/game/$gameId" params={{ gameId: gameForDay?.id || "latest" }}>
-      <Badge
-        key={props.day.toString()}
-        overlap="circular"
-        badgeContent={gameForDay ? "🟢" : undefined}
-        className={gameForDay && gameForDay.id === gameId ? "bg-blue-400" : ""}
-      >
-        <PickersDay
-          {...other}
-          outsideCurrentMonth={outsideCurrentMonth}
-          day={day}
-        />
-      </Badge>
-    </Link>
+    <Badge
+      key={props.day.toString()}
+      overlap="circular"
+      badgeContent={hasStarted ? "🟢" : undefined}
+    >
+      <PickersDay
+        {...other}
+        selected={gameForDay?.id === gameId}
+        disabled={!gameForDay}
+        outsideCurrentMonth={outsideCurrentMonth}
+        onDaySelect={() => onSelectDate && onSelectDate(gameForDay?.id)}
+        day={day}
+      />
+    </Badge>
   );
 }
 
-export default function Calendar() {
+interface CalendarProps {
+  onSelectDate: (gameId: string | undefined) => void;
+}
+
+export default function Calendar({ onSelectDate }: CalendarProps) {
   const { isPending, isError, data } = useArchives();
   if (isPending) {
     return <div>Loading...</div>;
@@ -48,13 +64,13 @@ export default function Calendar() {
       slots={{
         day: GameDay,
       }}
-      slotProps={
-        {
-          day: {
-            games: data,
-          },
-        } as any
-      }
+      slotProps={{
+        day: {
+          //@ts-expect-error slotProps is not properly typed
+          games: data,
+          onSelectDate,
+        },
+      }}
     />
   );
 }

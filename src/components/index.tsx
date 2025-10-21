@@ -17,8 +17,10 @@ import {
   MIN_WORD_LENGTH,
 } from "@/constants";
 import { calculatePoints, dateFromPrintDate } from "@/utils/game";
+import { useNavigate } from "@tanstack/react-router";
 
 export default function GameIndex() {
+  const navigate = useNavigate();
   const { game, session, gameState, updateSession } = useGame();
 
   const [inputWord, setInputWord] = useState<string>("");
@@ -114,7 +116,14 @@ export default function GameIndex() {
         open={showMenuItem === "calendar"}
         onClose={() => setShowMenuItem("")}
       >
-        <Calendar />
+        <Calendar
+          onSelectDate={(gameId) => {
+            if (gameId) {
+              setShowMenuItem("");
+              return navigate({ to: `/game/${gameId}` });
+            }
+          }}
+        />
       </Modal>
       <Modal
         open={showMenuItem === "settings"}
