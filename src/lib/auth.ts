@@ -1,6 +1,6 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { prisma } from "@/utils/database";
+import { prisma } from "@/lib/database.ts";
 import { genericOAuth } from "better-auth/plugins";
 import { reactStartCookies } from "better-auth/react-start";
 

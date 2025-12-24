@@ -8,15 +8,15 @@ enum LogLevel {
 class Logger {
   private readonly logLevel: LogLevel;
 
-  constructor(logLevelConfig = 'INFO') {
+  constructor(logLevelConfig = "INFO") {
     switch (logLevelConfig.toUpperCase()) {
-      case 'DEBUG':
+      case "DEBUG":
         this.logLevel = LogLevel.DEBUG;
         break;
-      case 'WARN':
+      case "WARN":
         this.logLevel = LogLevel.WARN;
         break;
-      case 'ERROR':
+      case "ERROR":
         this.logLevel = LogLevel.ERROR;
         break;
       default:
@@ -34,7 +34,7 @@ class Logger {
         this.getTimestamp(),
         LogLevel[LogLevel.DEBUG],
         message,
-        ...extra
+        ...extra,
       );
   }
 
@@ -44,7 +44,7 @@ class Logger {
         this.getTimestamp(),
         LogLevel[LogLevel.INFO],
         message,
-        ...extra
+        ...extra,
       );
   }
 
@@ -54,7 +54,7 @@ class Logger {
         this.getTimestamp(),
         LogLevel[LogLevel.WARN],
         message,
-        ...extra
+        ...extra,
       );
   }
 
@@ -64,7 +64,7 @@ class Logger {
         this.getTimestamp(),
         LogLevel[LogLevel.ERROR],
         err,
-        ...extra
+        ...extra,
       );
   }
 }

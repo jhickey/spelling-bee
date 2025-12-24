@@ -6,7 +6,7 @@ import {
   prisma,
   updateSettings,
   upsertGameSession,
-} from "./utils/database";
+} from "./lib/database.ts";
 import z from "zod";
 import { notFound } from "@tanstack/react-router";
 import authMiddleware from "@/middleware/authMiddleware.ts";

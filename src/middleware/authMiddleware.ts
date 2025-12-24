@@ -1,5 +1,5 @@
 import { createMiddleware } from "@tanstack/react-start";
-import { auth } from "@/utils/auth";
+import { auth } from "@/lib/auth.ts";
 import { getRequestHeaders } from "@tanstack/start-server-core";
 import { redirect } from "@tanstack/router-core";
 

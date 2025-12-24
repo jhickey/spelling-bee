@@ -3,7 +3,7 @@ import {
   calculatePoints,
   calculateRankingLevel,
   getHints,
-} from "../utils/game";
+} from "../utils/game.ts";
 import { RankingLevel } from "../types";
 import { ZWord } from "../schemas/database";
 import {

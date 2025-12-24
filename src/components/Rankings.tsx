@@ -1,5 +1,5 @@
 import { rankingLevels } from "../constants";
-import { calculateRankingPoints } from "../utils/game";
+import { calculateRankingPoints } from "../utils/game.ts";
 import useGame from "../hooks/useGame";
 
 export default function Rankings() {

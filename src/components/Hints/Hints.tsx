@@ -1,4 +1,4 @@
-import HintsGrid, { HintsData } from "../../utils/HintsGrid";
+import HintsGrid, { HintsData } from "../../lib/HintsGrid.ts";
 import { useEffect, useState } from "react";
 import HintsTable from "./HintsTable";
 import HintsStartingLetters from "./HintsStartingLetters";

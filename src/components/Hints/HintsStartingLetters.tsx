@@ -1,4 +1,4 @@
-import { StartingLetters } from "@/utils/HintsGrid.ts";
+import { StartingLetters } from "@/lib/HintsGrid.ts";
 
 interface HintsStartingLettersProps {
   startingLetters: StartingLetters;
