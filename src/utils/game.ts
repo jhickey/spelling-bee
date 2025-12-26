@@ -1,6 +1,6 @@
-import { rankingLevels } from "../constants.ts";
-import { Hints } from "../hooks/useGame.ts";
-import { ZWord } from "../schemas/database.ts";
+import { rankingLevels } from "../constants";
+import { Hints } from "../hooks/useGame";
+import { ZWord } from "../schemas/database";
 import { TZDate } from "@date-fns/tz";
 
 export const getRange = (start: number, end: number): number[] => {

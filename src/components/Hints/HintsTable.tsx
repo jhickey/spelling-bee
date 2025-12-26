@@ -1,4 +1,4 @@
-import { HintsData } from "../../lib/HintsGrid.ts";
+import { HintsData } from "../../lib/HintsGrid";
 import HintsTableRow from "./HintsTableRow";
 import {
   Table,

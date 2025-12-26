@@ -1,5 +1,5 @@
 import { useServerFn } from "@tanstack/react-start";
-import { getServerArchive } from "@/serverFns.ts";
+import { getServerArchive } from "@/serverFns";
 import { useQuery } from "@tanstack/react-query";
 
 export const useArchives = () => {

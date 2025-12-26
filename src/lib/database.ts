@@ -4,10 +4,10 @@ import {
   GameSchema,
   LettersSchema,
   UserSettings,
-} from "../schemas/database.ts";
-import { getWordsApiClient } from "../clients/WordsApiClient.ts";
-import logger from "../utils/logger.ts";
-import { TransportError } from "../clients/ApiClient.ts";
+} from "../schemas/database";
+import { getWordsApiClient } from "../clients/WordsApiClient";
+import logger from "../utils/logger";
+import { TransportError } from "../clients/ApiClient";
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;

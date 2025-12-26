@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/database.ts";
+import { prisma } from "@/lib/database";
 
 (async () => {
   try {

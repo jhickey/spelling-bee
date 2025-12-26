@@ -1,7 +1,7 @@
 import { useServerFn } from "@tanstack/react-start";
-import { getServerUser, updateServerUserSettings } from "@/serverFns.ts";
+import { getServerUser, updateServerUserSettings } from "@/serverFns";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { UserSettings } from "@/schemas/database.ts";
+import { UserSettings } from "@/schemas/database";
 
 const USER_QUERY_KEY = "user";
 

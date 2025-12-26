@@ -3,18 +3,18 @@ import {
   calculatePoints,
   calculateRankingLevel,
   getHints,
-} from "../utils/game.ts";
+} from "../utils/game";
 import { RankingLevel } from "../types";
 import { ZWord } from "../schemas/database";
 import {
   getServerGameSession,
   getServerGameState,
   updateGameSession,
-} from "@/serverFns.ts";
+} from "@/serverFns";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "@tanstack/react-router";
-import { useUser } from "@/hooks/useUser.ts";
+import { useUser } from "@/hooks/useUser";
 
 export interface Hints {
   remainingStarts: Record<string, number>;

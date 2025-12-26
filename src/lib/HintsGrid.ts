@@ -1,5 +1,5 @@
-import { calculatePangram, getRange } from "../utils/game.ts";
-import { ZWord } from "../schemas/database.ts";
+import { calculatePangram, getRange } from "../utils/game";
+import { ZWord } from "../schemas/database";
 
 type LengthColumns = number[];
 type LengthSums = number[][];

@@ -2,10 +2,10 @@ import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { PickersDay, PickersDayProps } from "@mui/x-date-pickers/PickersDay";
 import { Badge } from "@mui/material";
 import { useParams } from "@tanstack/react-router";
-import { useArchives } from "@/hooks/useArchives.ts";
+import { useArchives } from "@/hooks/useArchives";
 import { isSameDay } from "date-fns";
-import { dateFromPrintDate } from "@/utils/game.ts";
-import { GameWithSessions } from "@/serverFns.ts";
+import { dateFromPrintDate } from "@/utils/game";
+import { GameWithSessions } from "@/serverFns";
 
 function GameDay(
   props: PickersDayProps & {

@@ -16,7 +16,7 @@ import {
   MAX_WORD_LENGTH,
   MIN_WORD_LENGTH,
 } from "@/constants";
-import { calculatePoints, dateFromPrintDate } from "@/utils/game.ts";
+import { calculatePoints, dateFromPrintDate } from "@/utils/game";
 import { useNavigate } from "@tanstack/react-router";
 
 export default function GameIndex() {

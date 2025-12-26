@@ -1,5 +1,5 @@
 import { capitalize } from "./index";
-import useGame from "@/hooks/useGame.ts";
+import useGame from "@/hooks/useGame";
 
 export default function FullList() {
   const {

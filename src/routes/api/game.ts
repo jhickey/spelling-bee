@@ -1,4 +1,4 @@
-import { createGame } from "@/lib/database.ts";
+import { createGame } from "@/lib/database";
 import logger from "../../utils/logger";
 import { createFileRoute } from "@tanstack/react-router";
 

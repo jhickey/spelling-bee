@@ -1,5 +1,5 @@
 import { InputLabel, ListSubheader, MenuItem, Select } from "@mui/material";
-import { rankingLevels } from "@/constants.ts";
+import { rankingLevels } from "@/constants";
 
 interface SettingRankSelectProps {
   label: string;

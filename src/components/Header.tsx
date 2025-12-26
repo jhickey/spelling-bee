@@ -1,7 +1,7 @@
 import { BsLightbulb, BsCalendar3 } from "react-icons/bs";
 import { IoSettingsSharp } from "react-icons/io5";
 import { format } from "date-fns";
-import authClient from "@/lib/auth-client.ts";
+import authClient from "@/lib/auth-client";
 import { useNavigate } from "@tanstack/react-router";
 
 interface HeaderProps {

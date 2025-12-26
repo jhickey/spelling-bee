@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
-import useGame from "@/hooks/useGame.ts";
+import useGame from "@/hooks/useGame";
 import cn from "classnames";
-import { useUser } from "@/hooks/useUser.ts";
+import { useUser } from "@/hooks/useUser";
 
 interface HexagonProps {
   center: boolean;

@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import SettingRankSelect from "@/components/Settings/SettingRankSelect";
-import { useUser } from "@/hooks/useUser.ts";
+import { useUser } from "@/hooks/useUser";
 
 export default function Settings() {
   const { isPending, isError, data, updateSettings } = useUser();

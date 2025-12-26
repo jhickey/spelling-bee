@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import authClient from "@/lib/auth-client.ts";
+import authClient from "@/lib/auth-client";
 
 export const Route = createFileRoute("/auth/signin")({
   component: SignIn,

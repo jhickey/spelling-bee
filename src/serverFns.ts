@@ -6,11 +6,11 @@ import {
   prisma,
   updateSettings,
   upsertGameSession,
-} from "./lib/database.ts";
+} from "./lib/database";
 import z from "zod";
 import { notFound } from "@tanstack/react-router";
-import authMiddleware from "@/middleware/authMiddleware.ts";
-import { SettingsSchema, WordSchema } from "@/schemas/database.ts";
+import authMiddleware from "@/middleware/authMiddleware";
+import { SettingsSchema, WordSchema } from "@/schemas/database";
 import { Prisma } from "@prisma/client";
 
 const GameStateRequestSchema = z.object({
